@@ -29,12 +29,9 @@ def getWH():
             resp = bsObjForm(url)
             tmp_list = resp.split(',')
             #print tmp_list
-            wh_price = float(tmp_list[1]) #获取外汇实时价格
-            print key+' new price is %r.' % wh_price
-            if wh_price < wh_dict[key]:
-                wh_msg = key+' new price is %r, < %r !' %(wh_price, wh_dict[key])
-                #print wh_msg
-                wh_list.append(wh_msg)
+            wh_price = str(tmp_list[1]) #获取外汇实时价格
+            wh_msg = key+' new price is %r.' % wh_price
+            wh_list.append(wh_msg)
 
         return wh_list
 
@@ -47,9 +44,5 @@ def getWH():
 if __name__ == '__main__':
 
     msg_list =  getWH()
-    if len(msg_list) == 0 :
-        print 'Everthing is OK !'
-    else:
-        for msg in msg_list:
-            print msg
+    for msg in msg_list:
 '''

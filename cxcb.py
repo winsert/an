@@ -35,7 +35,7 @@ def getCB():
     
     conn = sqlite3.connect('cb.db')
     curs = conn.cursor()
-    sql = "select name, Code, zgcode, Prefix, position, jian, jia, zhong, zgj from cbsx" 
+    sql = "select name, Code, zgcode, Prefix, position, jian, jia, zhong, zgj from cb" 
     curs.execute(sql)
     tmp = curs.fetchall()
     curs.close()

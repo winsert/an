@@ -36,7 +36,7 @@ def getSQLite(code, newHP):
     try:
         conn = sqlite3.connect('cb.db')
         curs = conn.cursor()
-        sql = "UPDATE cbsx SET HPrice = %r WHERE Code = %r" % (hp, cc) 
+        sql = "UPDATE cb SET HPrice = %r WHERE Code = %r" % (hp, cc) 
         curs.execute(sql)
         conn.commit()
         curs.close()
@@ -53,7 +53,7 @@ def getHP():
     try:
         conn = sqlite3.connect('cb.db')
         curs = conn.cursor()
-        sql = "select name, Code, Prefix, position, HPrice from cbsx" 
+        sql = "select name, Code, Prefix, position, HPrice from cb" 
         curs.execute(sql)
         tmp = curs.fetchall()
         curs.close()
