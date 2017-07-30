@@ -17,19 +17,31 @@ def getSoup(url):
     return soup
 
 # 获取PM2.5数据：
-def getPM25():
+def getPM():
 
-    PM_url = 'http://www.pm25.com/jinan.html'
-    soup = getSoup(PM_url)
-    #city = soup.find(class_='bi_loaction_city')  # 城市名称
-    aqi = soup.find("a", {"class", "bi_aqiarea_num"})  # AQI指数
-    quality = soup.select(".bi_aqiarea_right span")  # 空气质量等级
-    result = soup.find("div", class_='bi_aqiarea_bottom')  # 空气质量描述
+    try:
+        tmp = []
+        url = 'http://www.pm25.in/rank'
+        soup = getSoup(url)
+        #print soup
+        result = soup.find('tbody').find_all('tr')
+        #print result[2].contents
 
-    PM25_msg = u'AQI指数：' + aqi.text + u'\n空气质量：' + quality[0].text + result.text
-    print PM25_msg
+        for x in result:
+            #print x.contents[3].string
+            if x.contents[3].string == u'济南':
+                for y in x.contents:
+                    if y.string != '\n':
+                        tmp.append(y.string)
+        #print tmp
+        msg = u'全国排名: '+tmp[0]+u'\n空气质量: '+tmp[3]+'\nAQI         : '+tmp[2]+'\nPM2.5    : '+tmp[5]+'\nPM10     : '+tmp[6]+u'\n一氧化碳: '+tmp[7]+u'\n二氧化氮: '+tmp[8]+u'\n二氧化硫: '+tmp[11]+u'\n臭氧1小时平均:'+tmp[9]+u'\n臭氧8小时平均: '+tmp[10]+u'\n首要污染物: '+str(tmp[4])
+        return msg
 
-    return PM25_msg
+    except Exception, e:
+        print e
+        return e
 
+'''
 if __name__ == '__main__':
-    print getPM25()
+    print getPM()
+'''
