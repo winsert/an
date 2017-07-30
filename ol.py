@@ -11,10 +11,12 @@ from datetime import datetime
 import itchat
 
 from cx_wh import getWH
+from cx_sp import getSP
 from cx_cb import getCB
 from cx_cx import getCX
+from cx_zg import getZG
 from cx_ex import getEX
-#from cx_pm import getPM25
+from cx_pm import getPM
 from cx_cpu import getCpuTemp
 from cx_tqsk import getWeather
 from cx_jrtq import getToday
@@ -25,6 +27,23 @@ def getHelp():
     print help_msg
     return help_msg
 
+# 发送单条信息
+def sendMsg(result):
+    msg = result
+    print msg
+    print time.ctime()
+    print
+    itchat.send(msg, 'filehelper')
+
+#发送多条信息
+def sendMsgList(result):
+    msgList = result
+    print time.ctime()
+    for msg in msgList:
+        print msg
+        itchat.send(msg, 'filehelper')
+    print
+
 @itchat.msg_register(itchat.content.TEXT)
 def main(msg):
 
@@ -32,80 +51,63 @@ def main(msg):
 
     try:
         print msg['Text']
-        tmp_list = list(msg['Text'])
-        cc = tmp_list[0]+tmp_list[1]
-        xx = tmp_list[2]+tmp_list[3]
+        tmp = msg['Text']
+        cc = tmp[0:2]
+        #print 'cc = ',cc
+        xx = tmp[2:]
+        #print 'xx = ', xx
     except:
         cc = ''
 
     if cc == 'cx':
         result = getCX(xx)
-        print time.ctime()
-        print result
-        print
-        itchat.send(result, 'filehelper')
+        sendMsg(result)
 
     elif cc == 'ex':
         result = getEX(xx)
-        print time.ctime()
-        print result
-        print
-        itchat.send(result, 'filehelper')
+        sendMsg(result)
 
-    elif msg['Text'] == 'help':
+    elif cc == 'zg':
+        zg_name, zg_new, zg_zdf = getZG(xx) #查询股票价名称,价格和涨跌幅
+        #print zg_name, zg_new, zg_zdf
+        result = zg_name+u'\n最新价:'+zg_new+u'\n涨跌幅:'+zg_zdf 
+        sendMsg(result)
+
+    elif msg['Text'] == 'h':
         result = getHelp()
-        print time.ctime()
-        itchat.send(result, 'filehelper')
+        sendMsg(result)
 
     elif msg['Text'] == 'tq':
         result = getToday()
-        print time.ctime()
-        print
-        itchat.send(time.ctime(), 'filehelper')
-        itchat.send(result, 'filehelper')
+        sendMsg(result)
 
     elif msg['Text'] == 'cpu':
         result = u'CPU温度：'+str(getCpuTemp())+u' ℃'
-        print time.ctime()
-        print
-        itchat.send(result, 'filehelper')
+        sendMsg(result)
 
     elif msg['Text'] == 'sk':
         result = getWeather()
-        print time.ctime()
-        print
-        itchat.send(result, 'filehelper')
+        sendMsg(result)
 
     elif msg['Text'] == 'pm':
-        #result = getPM25()
-        result = getHelp()
-        print time.ctime()
-        print
-        itchat.send(result, 'filehelper')
+        result = getPM()
+        sendMsg(result)
 
     elif msg['Text'] == 'cb':
-        print time.ctime()
         result = getCB()
-        for cbMsg in result:
-            print cbMsg
-            itchat.send(cbMsg, 'filehelper')
-        print
+        sendMsgList(result)
 
     elif msg['Text'] == 'wh':
-        print time.ctime()
         result = getWH()
-        for whMsg in result:
-            print whMsg
-            itchat.send(whMsg, 'filehelper')
-        print
+        sendMsgList(result)
 
     elif msg['Text'] == 'in':
-        print time.ctime()
         result = getIndex()
-        for indexMsg in result:
-            print indexMsg
-            itchat.send(indexMsg, 'filehelper')
-        print
+        sendMsgList(result)
+
+    elif msg['Text'] == 'sp':
+        result = getSP()
+        sendMsgList(result)
 
     elif msg['Text'] == 'off':
         print time.ctime()
@@ -120,16 +122,18 @@ def main(msg):
 
 help_msg = u"""
 使用说明：
-输入'help'：查询帮助
-输入'cpu'：查询CPU温度
+输入'h'：查询帮助
 输入'tq'：查询今日天气
 输入'sk'：查询天气实况
 输入'pm'：查询PM2.5数据
 输入'cb'：查询入线可转债
 输入'wh'：查询外汇信息
+输入'sp'：查询商品信息
 输入'in'：查询指数涨跌幅
 输入'cx+缩写'：查CB信息
 输入'ex+缩写'：查EB信息
+输入'zg+代码'：查股票信息
+输入'cpu'：查询CPU温度
 输入'off'：网页微信Logout
 """
 
