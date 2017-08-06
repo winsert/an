@@ -17,22 +17,25 @@ def bsObjForm(url):
 # 用于查询外汇的价格
 def getWH():
 
-    wh_dict = {'usdcny':6.73, 'audcny':5.30, 'hkdcny':0.86}
+    wh_dict = {'usdcny':6.71, 'audcny':5.30, 'hkdcny':0.85}
     wh_list = []
     wh_msg = ''
 
     try:
         for key in wh_dict:
+            value = wh_dict[key]
             #print key
             #print wh_dict[key]
             url = "http://hq.sinajs.cn/list=fx_s"+key #生成用于查询的URL
             resp = bsObjForm(url)
             tmp_list = resp.split(',')
             #print tmp_list
-            wh_price = float(tmp_list[1]) #获取外汇实时价格
-            print key+' new price is %r.' % wh_price
-            if wh_price < wh_dict[key]:
-                wh_msg = key+' new price is %r, < %r !' %(wh_price, wh_dict[key])
+            new_price = float(tmp_list[1]) #获取外汇实时价格
+            zr_price = float(tmp_list[3]) #获取外汇实时价格
+            zdf = round((new_price/zr_price - 1)*100, 3)
+            #print key+u'  最新价:'+str(new_price)+u'  涨跌:'+str(zdf)+'%'
+            if new_price < value:
+                wh_msg = key+' < '+str(value)+u'\n最新价:'+str(new_price)+u' 涨跌:'+str(zdf)+'%' 
                 #print wh_msg
                 wh_list.append(wh_msg)
 
@@ -46,7 +49,7 @@ def getWH():
 '''
 if __name__ == '__main__':
 
-    msg_list =  getWH()
+    msg_list = getWH()
     if len(msg_list) == 0 :
         print 'Everthing is OK !'
     else:

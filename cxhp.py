@@ -31,12 +31,11 @@ def getZZ(zzCode):
 def getSQLite(code, newHP):
     cc = code
     hp = float(newHP)
-    print hp
 
     try:
         conn = sqlite3.connect('cb.db')
         curs = conn.cursor()
-        sql = "UPDATE cb SET HPrice = %r WHERE Code = %r" % (hp, cc) 
+        sql = "UPDATE cb SET HPrice = %r WHERE Code = %s" % (hp, cc) 
         curs.execute(sql)
         conn.commit()
         curs.close()
@@ -62,25 +61,25 @@ def getHP():
         for cc in tmp:
             code = cc[1] #转债代码
             zzcode = cc[2]+cc[1] #前缀+转债代码
-            position = float(cc[3])
-            hp = float(cc[4])
+            position = float(cc[3]) #仓位
+            hp = float(cc[4]) #原最高价
 
             if position > 0:
                 zz = float(getZZ(zzcode)) #查询转债价格
 
                 if zz > hp:
                     getSQLite(code, zz)
-                    hpmsg = cc[0]+u': '+str(position)+u'张'+u'\n最新价超过130元:'+str(zz)
+                    hpmsg = cc[0]+u': '+str(position)+u'张'+u'\n最新价:'+str(zz)+u' >前高价:'+str(hp)
                     hpMsg.append(hpmsg)
 
-                elif hp > 130 and zz < 130:
+                elif hp > 130.0 and zz < 130.0:
                     getSQLite(code, 130.00)
-                    hpmsg = cc[0]+u': '+str(position)+u'张'+u'\n最新价跌破130元:'+str(zz)
+                    hpmsg = cc[0]+u': '+str(position)+u'张'+u'\n最新价:'+str(zz)+u',< 130元。'
                     hpMsg.append(hpmsg)
 
-                elif hp >= 130 and zz <= (hp-8) and zz > 130:
+                elif hp >= 130.0 and zz <= (hp-8) and zz > 130.0:
                     getSQLite(code, zz)
-                    hpmsg = cc[0]+u': '+str(position)+u'张'+u'\n最新价自最高价下跌超过8元:'+str(zz)
+                    hpmsg = cc[0]+u': '+str(position)+u'张'+u'\n最新价:'+str(zz)+u'\n自最高价下跌超过8元。'
                     hpMsg.append(hpmsg)
 
     except Exception,e2:

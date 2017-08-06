@@ -7,6 +7,7 @@ __author__ = 'winsert@163.com'
 
 import sqlite3, urllib2
 from datetime import datetime
+from cx_ex import getEX
 
 # 用于解析URL页面
 def bsObjForm(url):
@@ -74,7 +75,7 @@ def getCX(alias):
     try:
         conn = sqlite3.connect('cb.db')
         curs = conn.cursor()
-        sql = "select name, Code, zgcode, Prefix, jian, jia, zhong, Note, zgj, hsqsr, hsj, dqr, position, shj, ll from cb where Alias = '%s'" %cx
+        sql = "select name, Code, zgcode, Prefix, jian, jia, zhong, Note, zgj, hsqsr, hsj, dqr, position, shj, ll, ce, qs, qss from cb where Alias = '%s'" %cx
         curs.execute(sql)
         tmp = curs.fetchall()
         curs.close()
@@ -82,6 +83,10 @@ def getCX(alias):
 
         if tmp[0][3] == 'QS':
             msg = tmp[0][0]+u' :已强赎'
+            return msg
+
+        if tmp[0][15] == 'e':
+            msg = getEX(cx)
             return msg
 
         zgcode = tmp[0][3]+tmp[0][2] #正股代码
@@ -95,6 +100,8 @@ def getCX(alias):
         zgj = float(tmp[0][8]) #转股价
         zgjz = (100/zgj)*zg #计算转股价值
         yjl = round((zz-zgjz)/zgjz*100, 2) #计算溢价率
+        qsj = round((zgj * 1.3), 2) #计算强赎价
+        qsl = round((zg/zgj -1)*100, 2) #计算强赎率
 
         position = tmp[0][12] #已购买的张数
 
@@ -106,13 +113,16 @@ def getCX(alias):
         dqjz = getDQJZ(synx, shj, ll) #计算到期价值
         dqsyl = round((dqjz/zz - 1) * 100, 2)
         dqnh = round(dqsyl/synx, 2)
+        
+        qs = tmp[0][16]
+        qss = tmp[0][17]
 
         if float(tmp[0][10]) == 0.0:
-            msg = tmp[0][0]+' '+tmp[0][1]+' : '+str(position)+u'张\n'+u'最新价:'+str(zz)+u'  溢价率:'+str(yjl)+u'%'+u'\n建:'+str(tmp[0][4])+u'  加:'+str(tmp[0][5])+u'  重:'+str(tmp[0][6])+u'\n'+tmp[0][7]+'\n'+u'\n正股价:'+str(zg)+u' 涨跌幅:'+str(zg_zdf)+'%'+u'\n到期价值:'+str(dqjz)+u'\n到期收益率:'+str(dqsyl)+'%'+u'\n到期年化收益率:'+str(dqnh)+'%'+u'\n回售起始日:无'+u'\n回售价:无'+u'\n到期日:'+str(dqr)+u'\n剩余年限:'+str(synx)
+            msg = tmp[0][0]+' '+tmp[0][1]+' : '+str(position)+u'张\n'+u'最新价:'+str(zz)+u'  溢价率:'+str(yjl)+u'%'+u'\n建:'+str(tmp[0][4])+u'  加:'+str(tmp[0][5])+u'  重:'+str(tmp[0][6])+u'\n'+tmp[0][7]+'\n'+u'\n转股价:'+str(zgj)+u'\n正股价:'+str(zg)+u' 涨跌幅:'+str(zg_zdf)+'%'+u'\n强赎价:'+str(qsj)+u' 强赎率:'+str(qsl)+'%'+u'\n已强赎:'+str(qs)+u'天'+u'  剩余:'+str(qss)+u'天'+u'\n到期价值:'+str(dqjz)+u'\n到期收益率:'+str(dqsyl)+'%'+u'\n到期年化收益率:'+str(dqnh)+'%'+u'\n回售起始日:无'+u'\n回售价:无'+u'\n到期日:'+str(dqr)+u'\n剩余年限:'+str(synx)
             #print msg
             return msg
         else:
-            msg = tmp[0][0]+' '+tmp[0][1]+' : '+str(position)+u'张\n'+u'最新价:'+str(zz)+u'  溢价率:'+str(yjl)+u'%'+u'\n建:'+str(tmp[0][4])+u'  加:'+str(tmp[0][5])+u'  重:'+str(tmp[0][6])+u'\n'+tmp[0][7]+'\n'+u'\n正股价:'+str(zg)+u' 涨跌幅:'+str(zg_zdf)+'%'+u'\n到期价值:'+str(dqjz)+u'\n到期收益率:'+str(dqsyl)+'%'+u'\n到期年化收益率:'+str(dqnh)+'%'+u'\n回售起始日:'+str(tmp[0][9])+u'\n回售价:'+str(tmp[0][10])+u'\n到期日:'+str(dqr)+u'\n剩余年限:'+str(synx)
+            msg = tmp[0][0]+' '+tmp[0][1]+' : '+str(position)+u'张\n'+u'最新价:'+str(zz)+u'  溢价率:'+str(yjl)+u'%'+u'\n建:'+str(tmp[0][4])+u'  加:'+str(tmp[0][5])+u'  重:'+str(tmp[0][6])+u'\n'+tmp[0][7]+'\n'+u'\n转股价:'+str(zgj)+u'\n正股价:'+str(zg)+u' 涨跌幅:'+str(zg_zdf)+'%'+u'\n强赎价:'+str(qsj)+u' 强赎率:'+str(qsl)+'%'+u'\n已强赎:'+str(qs)+u'天'+u'  剩余:'+str(qss)+u'天'+u'\n到期价值:'+str(dqjz)+u'\n到期收益率:'+str(dqsyl)+'%'+u'\n到期年化收益率:'+str(dqnh)+'%'+u'\n回售起始日:'+str(tmp[0][9])+u'\n回售价:'+str(tmp[0][10])+u'\n到期日:'+str(dqr)+u'\n剩余年限:'+str(synx)
             #print msg
             return msg
 

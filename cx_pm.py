@@ -34,7 +34,7 @@ def getPM():
                     if y.string != '\n':
                         tmp.append(y.string)
         #print tmp
-        msg = u'全国排名: '+tmp[0]+u'\n空气质量: '+tmp[3]+'\nAQI         : '+tmp[2]+'\nPM2.5    : '+tmp[5]+'\nPM10     : '+tmp[6]+u'\n一氧化碳: '+tmp[7]+u'\n二氧化氮: '+tmp[8]+u'\n二氧化硫: '+tmp[11]+u'\n臭氧1小时平均:'+tmp[9]+u'\n臭氧8小时平均: '+tmp[10]+u'\n首要污染物: '+str(tmp[4])
+        msg = u'全国排名: '+tmp[0]+u'\n空气质量: '+tmp[3]+'\nAQI         : '+tmp[2]+'\nPM2.5    : '+tmp[5]+'\nPM10     : '+tmp[6]+u'\n一氧化碳: '+tmp[7]+u'\n二氧化氮: '+tmp[8]+u'\n二氧化硫: '+tmp[11]+u'\n臭氧1小时平均:'+tmp[9]+u'\n臭氧8小时平均: '+tmp[10]
         return msg
 
     except Exception, e:

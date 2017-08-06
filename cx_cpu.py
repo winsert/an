@@ -11,7 +11,7 @@ import os
 def getCpuTemp():
     cputemp=os.popen('vcgencmd measure_temp').readline()
     sumcputemp=float(cputemp.replace("temp=","").replace("'C\n",""))
-    print u'CPU温度：'+str(sumcputemp)+u' ℃'
+    #print u'CPU温度：'+str(sumcputemp)+u' ℃'
     return sumcputemp
 '''
 if __name__ == '__main__':

@@ -11,11 +11,11 @@ from datetime import datetime
 import itchat
 
 from cx_wh import getWH
+from cx_tk import getTK
 from cx_sp import getSP
 from cx_cb import getCB
 from cx_cx import getCX
 from cx_zg import getZG
-from cx_ex import getEX
 from cx_pm import getPM
 from cx_cpu import getCpuTemp
 from cx_tqsk import getWeather
@@ -63,8 +63,8 @@ def main(msg):
         result = getCX(xx)
         sendMsg(result)
 
-    elif cc == 'ex':
-        result = getEX(xx)
+    elif cc == 'tk':
+        result = getTK(xx)
         sendMsg(result)
 
     elif cc == 'zg':
@@ -130,9 +130,9 @@ help_msg = u"""
 输入'wh'：查询外汇信息
 输入'sp'：查询商品信息
 输入'in'：查询指数涨跌幅
-输入'cx+缩写'：查CB信息
-输入'ex+缩写'：查EB信息
-输入'zg+代码'：查股票信息
+输入'cx+缩写'：查转债信息
+输入'tk+缩写'：查转债条款
+输入'zg+代码'：查股票价格
 输入'cpu'：查询CPU温度
 输入'off'：网页微信Logout
 """

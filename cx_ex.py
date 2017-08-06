@@ -75,7 +75,7 @@ def getEX(alias):
     try:
         conn = sqlite3.connect('cb.db')
         curs = conn.cursor()
-        sql = "select name, Code, zgcode, Prefix, jian, jia, zhong, Note, zgj, hsqsr, hsj, dqr, position, shj, ll from eb where Alias = '%s'" %cx
+        sql = "select name, Code, zgcode, Prefix, jian, jia, zhong, Note, zgj, hsqsr, hsj, dqr, position, shj, ll, qs, qss from cb where Alias = '%s'" %cx
         curs.execute(sql)
         tmp = curs.fetchall()
         curs.close()
@@ -96,6 +96,8 @@ def getEX(alias):
         zgj = float(tmp[0][8]) #转股价
         zgjz = (100/zgj)*zg #计算转股价值
         yjl = round((zz-zgjz)/zgjz*100, 2) #计算溢价率
+        qsj = round((zgj * 1.3), 2) #计算强赎价
+        qsl = round((zg/zgj -1)*100, 2) #计算强赎率
 
         position = tmp[0][12] #已购买的张数
 
@@ -108,12 +110,15 @@ def getEX(alias):
         dqsyl = round((dqjz/zz - 1) * 100, 2)
         dqnh = round(dqsyl/synx, 2)
 
+        qs = tmp[0][15]
+        qss =tmp[0][16]
+
         if float(tmp[0][10]) == 0.0:
-            msg = tmp[0][0]+' '+tmp[0][1]+' : '+str(position)+u'张\n'+u'最新价:'+str(zz)+u'  溢价率:'+str(yjl)+u'%'+u'\n建:'+str(tmp[0][4])+u'  加:'+str(tmp[0][5])+u'  重:'+str(tmp[0][6])+u'\n'+tmp[0][7]+'\n'+u'\n正股价:'+str(zg)+u' 涨跌幅:'+str(zg_zdf)+'%'+u'\n到期价值:'+str(dqjz)+u'\n到期收益率:'+str(dqsyl)+'%'+u'\n到期年化收益率:'+str(dqnh)+'%'+u'\n回售起始日:无'+u'\n回售价:无'+u'\n到期日:'+str(dqr)+u'\n剩余年限:'+str(synx)
+            msg = tmp[0][0]+' '+tmp[0][1]+' : '+str(position)+u'张\n'+u'最新价:'+str(zz)+u'  溢价率:'+str(yjl)+u'%'+u'\n建:'+str(tmp[0][4])+u'  加:'+str(tmp[0][5])+u'  重:'+str(tmp[0][6])+u'\n'+tmp[0][7]+'\n'+u'\n转股价:'+str(zgj)+u'\n正股价:'+str(zg)+u' 涨跌幅:'+str(zg_zdf)+'%'+u'\n强赎价:'+str(qsj)+u' 强赎率:'+str(qsl)+'%'+u'\n已强赎:'+str(qs)+u'天'+u'  剩余:'+str(qss)+u'天'+u'\n到期价值:'+str(dqjz)+u'\n到期收益率:'+str(dqsyl)+'%'+u'\n到期年化收益率:'+str(dqnh)+'%'+u'\n回售起始日:无'+u'\n回售价:无'+u'\n到期日:'+str(dqr)+u'\n剩余年限:'+str(synx)
             #print msg
             return msg
         else:
-            msg = tmp[0][0]+' '+tmp[0][1]+': '+str(position)+u'张\n'+u'最新价:'+str(zz)+u'  溢价率:'+str(yjl)+u'%'+u'\n建:'+str(tmp[0][4])+u'  加:'+str(tmp[0][5])+u'  重:'+str(tmp[0][6])+u'\n'+tmp[0][7]+'\n'+u'\n正股价:'+str(zg)+u' 涨跌幅:'+str(zg_zdf)+'%'+u'\n到期价值:'+str(dqjz)+u'\n到期收益率:'+str(dqsyl)+'%'+u'\n到期年化收益率:'+str(dqnh)+'%'+u'\n回售起始日:无'+u'\n回售价:无'+u'\n到期日:'+str(dqr)+u'\n剩余年限:'+str(synx)
+            msg = tmp[0][0]+' '+tmp[0][1]+': '+str(position)+u'张\n'+u'最新价:'+str(zz)+u'  溢价率:'+str(yjl)+u'%'+u'\n建:'+str(tmp[0][4])+u'  加:'+str(tmp[0][5])+u'  重:'+str(tmp[0][6])+u'\n'+tmp[0][7]+'\n'+u'\n转股价:'+str(zgj)+u'\n正股价:'+str(zg)+u' 涨跌幅:'+str(zg_zdf)+'%'+u'\n强赎价:'+str(qsj)+u' 强赎率:'+str(qsl)+'%'+u'\n已强赎:'+str(qs)+u'天'+u'  剩余:'+str(qss)+u'天'+u'\n到期价值:'+str(dqjz)+u'\n到期收益率:'+str(dqsyl)+'%'+u'\n到期年化收益率:'+str(dqnh)+'%'+u'\n回售起始日:无'+u'\n回售价:无'+u'\n到期日:'+str(dqr)+u'\n剩余年限:'+str(synx)
         #print msg
         return msg
 
@@ -124,11 +129,10 @@ def getEX(alias):
         msg = u'查询可转债:%s不存在！' %cx
         print msg
         return msg
-'''
+
 if __name__ == '__main__':
     
     while 1:
         alias = raw_input('输入可转债名称的缩写：')
         print getEX(alias)
         print
-'''

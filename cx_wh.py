@@ -17,7 +17,7 @@ def bsObjForm(url):
 # 用于查询外汇的价格
 def getWH():
 
-    wh_dict = {'usdcny':6.73, 'audcny':5.30, 'hkdcny':0.86}
+    wh_dict = {'usdcny':6.72, 'audcny':5.30, 'hkdcny':0.86, 'audusd':0.79, 'eurusd':1.16}
     wh_list = []
     wh_msg = ''
 
@@ -29,8 +29,10 @@ def getWH():
             resp = bsObjForm(url)
             tmp_list = resp.split(',')
             #print tmp_list
-            wh_price = str(tmp_list[1]) #获取外汇实时价格
-            wh_msg = key+' new price is %r.' % wh_price
+            new_price = float(tmp_list[1]) #获取实时价格
+            zr_price = float(tmp_list[3]) #获取昨日收盘价
+            zdf = round((new_price/zr_price - 1)*100, 3)
+            wh_msg = key+u'\n最新价:'+str(round(new_price, 4))+u'  涨跌:'+str(zdf)+' %'
             wh_list.append(wh_msg)
 
         return wh_list
@@ -45,4 +47,5 @@ if __name__ == '__main__':
 
     msg_list =  getWH()
     for msg in msg_list:
+        print msg
 '''

@@ -29,7 +29,7 @@ def getWeather():
     #print wlist[18]
 
     weather_msg = u'地点：'+wlist[16].strip().strip('\n').strip('\t').strip('\r')+u'\n时间：'+wlist[17]+u'\n温度：'+wlist[18].strip().strip('.')+u'℃'+u'\n湿度：'+wlist[19].strip()+u'％'+u'\n风向：'+wlist[20]+u'\n风速：'+wlist[21].strip()+u'm/s'+u'\n雨量：'+wlist[22].strip()+u'mm/h'+u'\n气压：'+wlist[23].strip()+u'hPa'+'\n'
-    print weather_msg
+    #print weather_msg
 
     return weather_msg
 '''

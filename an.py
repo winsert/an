@@ -12,6 +12,7 @@ from datetime import datetime
 from cxcb import getCB
 from cxhp import getHP
 from cxwh import getWH
+from cxqs import getQS
 from cxindex import getIndex
 
 if __name__ == '__main__':
@@ -88,7 +89,7 @@ if __name__ == '__main__':
             #itchat.send(HPriceMsg, 'filehelper')
         else:
             for hpMsg in HPlist: #有满足高价折扣法的CB
-                #print hpMsg
+                print hpMsg
                 #print
                 #itchat.send(hpMsg, 'filehelper')
                 itchat.send(hpMsg, toUserName = userName)
@@ -100,11 +101,11 @@ if __name__ == '__main__':
             print
         else:
             for whMsg in WHlist: #有满足条件外汇
-                #print whMsg
+                print whMsg
                 #print
                 itchat.send(whMsg, toUserName = userName)
 
-        time.sleep(300)  # 延时查询的秒数,300即延时5分钟查询一次。
+        time.sleep(200)  # 延时查询的秒数,300即延时5分钟查询一次。
 
     # 查询指数收盘的涨跌情况
     index = {u'上证50':'sh000016', u'沪深300':'sz399300', u'中证500':'sh000905', u'创业板':'sz399006', u'B股':'sh000003', u'国债':'sh000012'} #要查询的指数代码
@@ -116,6 +117,13 @@ if __name__ == '__main__':
         print index_msg
         #itchat.send(index_msg, 'filehelper')
         itchat.send(index_msg, toUserName = userName)
+
+    #计算转债的强赎天数：
+    qsMsgList = getQS()
+    if len(qsMsgList) > 0:
+        for qsMsg in qsMsgList:
+            print qsMsg
+            itchat.send(qsMsg, toUserName = userName)
 
     print time.asctime(time.localtime(time.time())) #显示查询时间
     itchat.send(endMsg, toUserName='filehelper')
