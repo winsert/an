@@ -68,19 +68,23 @@ def getQS():
                 if zg > 0 and zz > 0:
                     qsl = round((zg/zgj), 2) #计算强赎率
 
-                    if qsl > 1.3 :
+                    if qsl > 1.3 and qs < 15 and qss >= 1:
                         nqs = qs + 1
                         nqss = qss -1
                         conn.execute("UPDATE cb SET qs = %r, qss = %r where Code = %s" % (nqs, nqss, code))
                         msg = name+u'\n已强赎'+str(nqs)+u'天,剩余天数:'+str(nqss)+u'天。'
                         msglist.append(msg)
-                    elif qsl < 1.3 and qs > 0 :
+                    elif qsl > 1.3 and qs >= 15 and qss >= 0:
+                        conn.execute("UPDATE cb SET prefix = 'QS' where Code = %s" % code)
+                        msg = name+u' 已完成强赎!!!'
+                        msglist.append(msg)
+                    elif qsl < 1.3 and qs >= 1 and qss >= 1:
                         nqss = qss -1
                         conn.execute("UPDATE cb SET qss = %r where Code = %s" % (nqss, code))
                         msg = name+u'\n已强赎'+str(qs)+u'天,剩余天数:'+str(nqss)+u'天。'
                         msglist.append(msg)
 
-                if qss == 0 and qs < 15:
+                if qss == 0 :
                     nqs = 0
                     nqss = 30
                     conn.execute("UPDATE cb SET qs = %r, qss = %r where Code = %s" % (nqs, nqss, code))
