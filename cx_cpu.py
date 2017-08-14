@@ -13,7 +13,15 @@ def getCpuTemp():
     sumcputemp=float(cputemp.replace("temp=","").replace("'C\n",""))
     #print u'CPU温度：'+str(sumcputemp)+u' ℃'
     return sumcputemp
-'''
+
+def getDiskSpace():
+    p = os.popen("df -h /")
+    i = 0
+    while 1:
+        i = i +1
+        line = p.readline()
+        if i==2:
+            return(line.split()[1:5])
+
 if __name__ == '__main__':
     print u'CPU温度：'+str(getCpuTemp())+u' ℃'
-'''

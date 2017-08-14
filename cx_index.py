@@ -39,7 +39,7 @@ def getIndex():
         value = index.get(k)
         index_zz = cxIndex(value)
         index_msg = k+' : '+index_zz
-        print index_msg
+        #print index_msg
         msg_list.append(index_msg)
 
     #print msg_list
