@@ -17,10 +17,11 @@ from cx_cb import getCB
 from cx_cx import getCX
 from cx_zg import getZG
 from cx_pm import getPM
-from cx_cpu import getCpuTemp
 from cx_tqsk import getWeather
 from cx_jrtq import getToday
 from cx_index import getIndex
+from cx_raspi import getCpuTemp
+from cx_raspi import getDiskSpace
 
 # 获得帮助
 def getHelp():
@@ -82,7 +83,11 @@ def main(msg):
         sendMsg(result)
 
     elif msg['Text'] == 'cpu':
-        result = u'CPU温度：'+str(getCpuTemp())+u' ℃'
+        result = getCpuTemp()
+        sendMsg(result)
+
+    elif msg['Text'] == 'disk':
+        result = getDiskSpace()
         sendMsg(result)
 
     elif msg['Text'] == 'sk':
@@ -133,6 +138,7 @@ help_msg = u"""
 输入'cx+缩写'：查转债信息
 输入'tk+缩写'：查转债条款
 输入'zg+代码'：查股票价格
+输入'disk'：DISK使用情况
 输入'cpu'：查询CPU温度
 输入'off'：网页微信Logout
 """
