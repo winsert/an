@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-# 查询CB正股价格的模块
+# 查询正股价格的模块
 
 __author__ = 'winsert@163.com'
 
@@ -26,10 +26,8 @@ def getZG(zgCode):
         tmp2 = resp2.split(',')
 
         if len(tmp1) == 1 and len(tmp2) == 1:
-            zg_name = u'股票不存在' #获取股票名称
-            zg_price = '0.0'
-            zg_zdf = '0.0'
-            return zg_name, zg_price, zg_zdf
+            msg = u'股票不存在'
+            return msg
         elif len(tmp1) == 1:
             tmp = tmp2
         else:
@@ -37,27 +35,28 @@ def getZG(zgCode):
 
         if float(tmp[3]) == 0.0:
             zg_name = tmp[0] #获取股票名称
-            zg_price = u'停牌'
-            zg_zdf = '0.0'
+	    msg =zg_name[-4:]+u" 停牌了"
+	    return msg
         else:
-            zg_name = tmp[0] #获取股票名称
-            zgzr_price = float(tmp[2]) #获取正股昨日收盘价
-            zg_new = float(tmp[3]) #获取正股最新价格
-            zg_zdf = str(round((zg_new/zgzr_price)*100, 2) -100)
-            zg_price = str(zg_new)
-        return zg_name[-4:], zg_price, zg_zdf
+            zg_name = tmp[0][-4:] #获取股票名称
+	    zg_kpj = str(tmp[1]) #今日开盘价
+            zg_zsp = str(tmp[2]) #昨日收盘价
+            zg_new = str(tmp[3]) #今日最新价格
+            zg_zdf = str(round((float(tmp[3])/float(tmp[2]))*100, 2) -100) #涨跌幅
+	    zg_zgj = str(tmp[4]) #今日最高价
+	    zg_zdj = str(tmp[5]) #今日最低价
+	    zg_cjl = str(round(float(tmp[8])/1000000.00, 2)) #成交量 百万手
+	    zg_cje = str(round((float(tmp[9])/100000000.00), 2)) #成交金额 亿元
+
+	    msg = zg_name+u'\n今日开盘价:'+zg_kpj+u'\n昨日收盘价:'+zg_zsp+u'\n今日最新价:'+zg_new+u'\n今日最高价:'+zg_zgj+u'\n今日最低价:'+zg_zdj+u'\n涨  跌  幅:'+zg_zdf+' %'+u'\n成  交  量:'+zg_cjl+u' 万手'+u'\n成交金额:'+zg_cje+u' 亿元'
+        return msg
 
     except Exception, e:
         print e
-        zg_name = e
-        zg_price = '0.0'
-        zg_zdf = '0.0'
-        return zg_name, zg_price, zg_zdf
+        msg = u"查询 "+str(key)+u" 出错了"
+	return msg
 
-'''
 if __name__ == '__main__':
 
     stock = raw_input('请输入股票代码:')
-    zg_name, zg_new, zg_zdf =  getZG(stock)
-    print zg_name, zg_new, zg_zdf
-'''
+    print getZG(stock)
