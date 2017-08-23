@@ -13,7 +13,7 @@ def getSoup(url):
     soup_url = url 
     headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) ' 'Chrome/51.0.2704.63 Safari/537.36'}
     content = requests.get(soup_url, headers=headers) 
-    soup = BeautifulSoup(content.text, 'lxml')
+    soup = BeautifulSoup(content.text, 'html.parser')
     return soup
 
 # 获取PM2.5数据：
@@ -41,7 +41,5 @@ def getPM():
         print e
         return e
 
-'''
 if __name__ == '__main__':
     print getPM()
-'''
