@@ -69,9 +69,7 @@ def main(msg):
         sendMsg(result)
 
     elif cc == 'zg':
-        zg_name, zg_new, zg_zdf = getZG(xx) #查询股票价名称,价格和涨跌幅
-        #print zg_name, zg_new, zg_zdf
-        result = zg_name+u'\n最新价:'+zg_new+u'\n涨跌幅:'+zg_zdf 
+        result = getZG(xx) #查询股票价名称,价格和涨跌幅
         sendMsg(result)
 
     elif msg['Text'] == 'h':
