@@ -5,7 +5,7 @@
 
 __author__ = 'Andy'
 
-import requests, lxml
+import requests
 from bs4 import BeautifulSoup
 
 # 用于解析URL页面:
