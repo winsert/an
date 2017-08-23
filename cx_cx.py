@@ -119,11 +119,11 @@ def getCX(alias):
         zgqsr = str(tmp[0][18])
 
         if float(tmp[0][10]) == 0.0:
-            msg = tmp[0][0]+' '+tmp[0][1]+' : '+str(position)+u'张\n'+u'最新价:'+str(zz)+u'  溢价率:'+str(yjl)+u'%'+u'\n建:'+str(tmp[0][4])+u'  加:'+str(tmp[0][5])+u'  重:'+str(tmp[0][6])+u'\n'+tmp[0][7]+'\n'+u'\n转股价:'+str(zgj)+u'\n转股起始日:'+zgqsr+u'\n正股价:'+str(zg)+u' 涨跌幅:'+str(zg_zdf)+'%'+u'\n强赎价:'+str(qsj)+u' 强赎率:'+str(qsl)+'%'+u'\n已强赎:'+str(qs)+u'天'+u'  剩余:'+str(qss)+u'天'+u'\n到期价值:'+str(dqjz)+u'\n到期收益率:'+str(dqsyl)+'%'+u'\n到期年化收益率:'+str(dqnh)+'%'+u'\n回售起始日:无'+u'\n回售价:无'+u'\n到期日:'+str(dqr)+u'\n剩余年限:'+str(synx)
+            msg = tmp[0][0]+' '+tmp[0][2]+u'\n可转债 '+tmp[0][1]+' : '+str(position)+u'张\n'+u'最新价:'+str(zz)+u'  溢价率:'+str(yjl)+u'%'+u'\n建:'+str(tmp[0][4])+u'  加:'+str(tmp[0][5])+u'  重:'+str(tmp[0][6])+u'\n'+tmp[0][7]+'\n'+u'\n转股价:'+str(zgj)+u'\n转股起始日:'+zgqsr+u'\n正股价:'+str(zg)+u' 涨跌幅:'+str(zg_zdf)+'%'+u'\n强赎价:'+str(qsj)+u'\n已强赎:'+str(qs)+u'天'+u'  剩余:'+str(qss)+u'天'+u'\n到期价值:'+str(dqjz)+u'\n到期收益率:'+str(dqsyl)+'%'+u'\n到期年化收益率:'+str(dqnh)+'%'+u'\n回售起始日:无'+u'\n回售价:无'+u'\n到期日:'+str(dqr)+u'\n剩余年限:'+str(synx)
             #print msg
             return msg
         else:
-            msg = tmp[0][0]+' '+tmp[0][1]+' : '+str(position)+u'张\n'+u'最新价:'+str(zz)+u'  溢价率:'+str(yjl)+u'%'+u'\n建:'+str(tmp[0][4])+u'  加:'+str(tmp[0][5])+u'  重:'+str(tmp[0][6])+u'\n'+tmp[0][7]+'\n'+u'\n转股价:'+str(zgj)+u'\n转股起始日:'+zgqsr+u'\n正股价:'+str(zg)+u' 涨跌幅:'+str(zg_zdf)+'%'+u'\n强赎价:'+str(qsj)+u' 强赎率:'+str(qsl)+'%'+u'\n已强赎:'+str(qs)+u'天'+u'  剩余:'+str(qss)+u'天'+u'\n到期价值:'+str(dqjz)+u'\n到期收益率:'+str(dqsyl)+'%'+u'\n到期年化收益率:'+str(dqnh)+'%'+u'\n回售起始日:'+str(tmp[0][9])+u'\n回售价:'+str(tmp[0][10])+u'\n到期日:'+str(dqr)+u'\n剩余年限:'+str(synx)
+            msg = tmp[0][0]+' '+tmp[0][2]+u'\n可转债 '+tmp[0][1]+' : '+str(position)+u'张\n'+u'最新价:'+str(zz)+u'  溢价率:'+str(yjl)+u'%'+u'\n建:'+str(tmp[0][4])+u'  加:'+str(tmp[0][5])+u'  重:'+str(tmp[0][6])+u'\n'+tmp[0][7]+'\n'+u'\n转股价:'+str(zgj)+u'\n转股起始日:'+zgqsr+u'\n正股价:'+str(zg)+u' 涨跌幅:'+str(zg_zdf)+'%'+u'\n强赎价:'+str(qsj)+u'\n已强赎:'+str(qs)+u'天'+u'  剩余:'+str(qss)+u'天'+u'\n到期价值:'+str(dqjz)+u'\n到期收益率:'+str(dqsyl)+'%'+u'\n到期年化收益率:'+str(dqnh)+'%'+u'\n回售起始日:'+str(tmp[0][9])+u'\n回售价:'+str(tmp[0][10])+u'\n到期日:'+str(dqr)+u'\n剩余年限:'+str(synx)
             #print msg
             return msg
 
