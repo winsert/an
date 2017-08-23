@@ -5,7 +5,7 @@
 
 __author__ = 'Andy'
 
-import requests, lxml, os, sys
+import requests, os, sys
 from bs4 import BeautifulSoup
 
 # 用于解析URL页面:
@@ -13,7 +13,7 @@ def getSoup(url):
     soup_url = url 
     headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) ' 'Chrome/51.0.2704.63 Safari/537.36'}
     content = requests.get(soup_url, headers=headers) 
-    soup = BeautifulSoup(content.text, 'lxml')
+    soup = BeautifulSoup(content.text, 'html.parser')
     return soup
 
 # 获取天气实况:
