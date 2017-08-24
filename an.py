@@ -20,7 +20,7 @@ if __name__ == '__main__':
     itchat.login(enableCmdQR=2)
     #itchat.auto_login(enableCmdQR=2) # 通过二维码登录微信
 
-    startMsg = 'Have a good day !'
+    startMsg = u'不挑戏，不逃戏，不入戏，不调戏'
     restStartMsg = 'Have a good Lunch !'
     restEndMsg = 'Good Afternoon !'
     endMsg =  "I will come back !"
