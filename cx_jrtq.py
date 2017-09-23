@@ -44,7 +44,7 @@ def getHistoryWeather(url, month_day):
 # 获取今日天气信息
 def getTodayWeather(url):
     resp = bsObjForm(url)
-    soup = BeautifulSoup(resp, 'lxml')
+    soup = BeautifulSoup(resp, 'html.parser')
     temp = soup.find('div', class_="tqshow").find('span').get_text()
     status = soup.find('li',class_="cDRed").get_text()
     #wind = soup.find('li', style="height:18px;overflow:hidden").get_text()
@@ -63,10 +63,8 @@ def getToday():
     history_weather_msg = getHistoryWeather(history_url, month_day)
     #print history_weather_msg
         
-    print today_weather_msg+u'\n'+history_weather_msg
+    #print today_weather_msg+u'\n'+history_weather_msg
     return today_weather_msg+u'\n'+history_weather_msg
 
-'''
 if __name__ == '__main__':
     getToday()
-'''

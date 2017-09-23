@@ -17,7 +17,7 @@ def bsObjForm(url):
 # 用于查询外汇的价格
 def getWH():
 
-    wh_dict = {'usdcny':6.64, 'audcny':5.20, 'hkdcny':0.82}
+    wh_dict = {'usdcny':6.40, 'audcny':5.15, 'hkdcny':0.82}
     wh_list = []
     wh_msg = ''
 
