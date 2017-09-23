@@ -25,6 +25,8 @@ cxindex.py  被动查询证券指数的模块
 
 cx_jrtq.py  主动查询今日天气信息的模块
 
+cxjj.py     被动查询基金的模块
+
 cx_pm.py    主动查询PM等数据的模块
 
 cxqs.py     被动计算转债的强赎天数
