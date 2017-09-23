@@ -9,11 +9,12 @@ import itchat, time
 from sys import exit
 from datetime import datetime
 
-from cxcb import getCB
-from cxhp import getHP
-from cxwh import getWH
-from cxqs import getQS
-from cxindex import getIndex
+from cxcb import getCB #查询可转债模块
+from cxhp import getHP #高价折扣模块
+from cxwh import getWH #查询外汇模块
+from cxjj import getJJ #查询基金模块
+from cxqs import getQS #强赎模块
+from cxindex import getIndex #指数模块
 
 if __name__ == '__main__':
     
@@ -27,6 +28,7 @@ if __name__ == '__main__':
     newPriceMsg =  u"没有可转债满足 买入条件。"
     HPriceMsg =  u"没有可转债满足 高价折扣法 。"
     WHmsg = u"外汇一切正常 !"
+    JJmsg = u"基金一切正常 !"
 
     account = itchat.get_friends()
     for user in account:
@@ -100,10 +102,19 @@ if __name__ == '__main__':
             print WHmsg
             print
         else:
-            for whMsg in WHlist: #有满足条件外汇
+            for whMsg in WHlist: #有满足条件的外汇
                 print whMsg
-                #print
                 itchat.send(whMsg, toUserName = userName)
+
+        # 查询基金价格是否低于预设值
+        JJlist = getJJ()
+        if len(JJlist) == 0: #没有满足条件的基金
+            print JJmsg
+            print
+        else:
+            for jjMsg in JJlist: #有满足条件的基金
+                print jjMsg
+                itchat.send(jjMsg, toUserName = userName)
 
         time.sleep(120)  # 延时查询的秒数,300即延时5分钟查询一次。
 
