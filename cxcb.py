@@ -53,10 +53,10 @@ def getCB():
             zhong = float(cc[7]) #重仓价
             zz = float(getZZ(zzcode)) #查询转债价格
 
-            if zz <= jian and zz > jia and position < 400: #满足建仓条件
+            if zz <= jian and zz > jia and position < 600: #满足建仓条件
                 zz_msg = cc[0]+u': '+str(position)+u'张'+u'\n最新价:'+str(zz)+u'  建仓价:'+str(jian)
                 msg.append(zz_msg)
-            elif zz <= jia and zz > zhong and position < 700: #满足加仓条件
+            elif zz <= jia and zz > zhong and position < 900: #满足加仓条件
                 zz_msg = cc[0]+u': '+str(position)+u'张'+u'\n最新价:'+str(zz)+u'  加仓价:'+str(jia)
                 msg.append(zz_msg)
             elif zz <= zhong and zz > 0: #满足重仓条件
