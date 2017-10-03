@@ -17,7 +17,7 @@ def bsObjForm(url):
 # 用于查询基金的价格
 def getJJ():
 
-    jj_dict = {'sh505888':1.00, 'sz184801':99.0} #预警价
+    jj_dict = {'sh505888':1.00, 'sz150016':1.00} #预警价
     jj_list = []
     jj_msg = ''
 
@@ -33,9 +33,9 @@ def getJJ():
             jj_name = tmp_list[0][-4:] #基金名称
             new_price = float(tmp_list[1]) #获取基金最新价格
             zr_price = float(tmp_list[3]) #获取基金昨日价格
-            zdf = round((new_price/zr_price - 1)*100, 3) #计算涨跌
+            #zdf = round((new_price/zr_price - 1)*100, 3) #计算涨跌
             if new_price < value:
-                jj_msg = jj_name+' < '+str(value)+u'\n最新价:'+str(new_price)+u' 涨跌:'+str(zdf)+'%' 
+                jj_msg = jj_name+u' 最新价:'+str(new_price)+' < '+str(value)
                 #print jj_msg
                 jj_list.append(jj_msg)
 
