@@ -27,6 +27,23 @@ def getZZ(zzCode):
         zz_price = 0 
         return zz_price
 
+#对cb.db中LPrice(最低价)的值进行修改
+def getSQLite(code, newLP):
+    cc = code
+    lp = float(newLP) - 0.5
+
+    try:
+        conn = sqlite3.connect('cb.db')
+        curs = conn.cursor()
+        sql = "UPDATE cb SET LPrice = %r WHERE Code = %s" % (lp, cc) 
+        curs.execute(sql)
+        conn.commit()
+        curs.close()
+        conn.close()
+
+    except Exception, e1:
+        print 'getSQLite ERROR :',e1
+
 # 从cb.db数据库中提取可转债数据进行实时三线分析
 def getCB():
 
@@ -35,7 +52,7 @@ def getCB():
     
     conn = sqlite3.connect('cb.db')
     curs = conn.cursor()
-    sql = "select name, Code, zgcode, Prefix, position, jian, jia, zhong, zgj from cb" 
+    sql = "select name, Code, zgcode, Prefix, position, jian, jia, zhong, zgj, LPrice from cb" 
     curs.execute(sql)
     tmp = curs.fetchall()
     curs.close()
@@ -47,28 +64,32 @@ def getCB():
         if prefix != 'QS' :  #QS代表已强赎
 
             zzcode = cc[3]+cc[1] #前缀+转债代码
+            code = cc[1] #转债代码
             position = cc[4] #仓位
             jian = float(cc[5]) #建仓价
             jia = float(cc[6])  #加仓价
             zhong = float(cc[7]) #重仓价
+            LPrice = float(cc[9]) #最低价
             zz = float(getZZ(zzcode)) #查询转债价格
 
-            if zz <= jian and zz > jia and position < 600: #满足建仓条件
+            if zz <= jian and zz < LPrice and zz > jia and position < 600: #满足建仓条件
                 zz_msg = cc[0]+u': '+str(position)+u'张'+u'\n最新价:'+str(zz)+u'  建仓价:'+str(jian)
                 msg.append(zz_msg)
-            elif zz <= jia and zz > zhong and position < 900: #满足加仓条件
+                getSQLite(code, zz)
+            elif zz <= jia and zz < LPrice and zz > zhong and position < 900: #满足加仓条件
                 zz_msg = cc[0]+u': '+str(position)+u'张'+u'\n最新价:'+str(zz)+u'  加仓价:'+str(jia)
                 msg.append(zz_msg)
-            elif zz <= zhong and zz > 0: #满足重仓条件
+                getSQLite(code, zz)
+            elif zz <= zhong and zz< LPrice and zz > 0: #满足重仓条件
                 zz_msg = cc[0]+u': '+str(position)+u'张'+u'\n最新价:'+str(zz)+u'  重仓价:'+str(zhong)
                 msg.append(zz_msg)
+                getSQLite(code, zz)
 
             #print zz_msg
 
     #print msg
     return msg
 
-'''
 if __name__ == '__main__':
 
     msglist = getCB()
@@ -76,6 +97,5 @@ if __name__ == '__main__':
         print u"没有满足条件的CB"
     else:    
         for msg in msglist:
-        print msg
+            print msg
         print
-'''
