@@ -17,7 +17,8 @@ def bsObjForm(url):
 # 用于查询基金的价格
 def getJJ():
 
-    jj_dict = {'sh505888':1.00, 'sz150016':1.00} #预警价
+    jj_dict = {'sh505888':1.00,} #预警价
+    #jj_dict = {'sh505888':1.00, 'sz150016':1.00} #预警价
     jj_list = []
     jj_msg = ''
 
