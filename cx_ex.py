@@ -45,7 +45,7 @@ def getSYNX(dqr):
     ymd = dqr #到期日
     y = ymd.split('-')
     d1 = datetime(int(y[0]), int(y[1]), int(y[2]), 0, 0)
-    synx = round((d1 - datetime.now()).days / 365.00, 2)
+    synx = round((d1 - datetime.now()).days / 365.00, 3)
     return synx
 
 # 计算到期价值
@@ -61,7 +61,7 @@ def getDQJZ(synx, shj,  ll):
 
     l = mnlv.split(',') #转成列表
     for i in range (len(l)-y, len(l)-1):
-        dqjz = dqjz +round(float(l[i])*0.8, 2)
+        dqjz = dqjz +round(float(l[i])*0.8, 3)
 
     dqjz = dqjz + j + float(l[-1])
     #print dqjz
@@ -105,7 +105,9 @@ def getEX(alias):
         synx = getSYNX(dqr) #计算剩余年限
         
         shj = tmp[0][13] #赎回价
+        print shj
         ll = tmp[0][14] #每年的利率
+        print ll
         dqjz = getDQJZ(synx, shj, ll) #计算到期价值
         dqsyl = round((dqjz/zz - 1) * 100, 2)
         dqnh = round(dqsyl/synx, 2)
