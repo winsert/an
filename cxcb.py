@@ -30,7 +30,7 @@ def getZZ(zzCode):
 #对cb.db中LPrice(最低价)的值进行修改
 def getSQLite(code, newLP):
     cc = code
-    lp = float(newLP) - 0.5
+    lp = float(newLP)
 
     try:
         conn = sqlite3.connect('cb.db')
@@ -69,7 +69,7 @@ def getCB():
             jian = float(cc[5]) #建仓价
             jia = float(cc[6])  #加仓价
             zhong = float(cc[7]) #重仓价
-            LPrice = float(cc[9]) #最低价
+            LPrice = float(cc[9])-0.5 #最低价-0.5
             zz = float(getZZ(zzcode)) #查询转债价格
 
             if zz <= jian and zz < LPrice and zz > jia and position < 600: #满足建仓条件
@@ -94,7 +94,7 @@ if __name__ == '__main__':
 
     msglist = getCB()
     if len(msglist) == 0:
-        print u"没有满足条件的CB"
+        print u"没有满足条件的CB,EB"
     else:    
         for msg in msglist:
             print msg
