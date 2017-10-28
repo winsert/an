@@ -9,7 +9,7 @@ import itchat, time
 from sys import exit
 from datetime import datetime
 
-from cxcb import getCB #查询可转债模块
+from cxcb import getCB #查询可转债,可交换债是否满足三线的模块
 from cxhp import getHP #高价折扣模块
 from cxwh import getWH #查询外汇模块
 from cxjj import getJJ #查询基金模块
