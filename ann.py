@@ -145,4 +145,4 @@ if __name__ == '__main__':
             print time.asctime(time.localtime(time.time())) #显示查询时间
             itchat.send(endMsg, toUserName='filehelper')
             itchat.send(endMsg, toUserName = userName)
-            time.sleep(66600)  # 延时66600秒(18.5小时)。
+            time.sleep(64200)  # 延时64800秒(18小时)。
