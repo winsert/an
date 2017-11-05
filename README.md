@@ -1,13 +1,16 @@
 # an
 实时查询可转债、外汇等价格信息并进行分析的应用
 
-an.py       每天执行一次的被动查询的主程序
-ann.py      可长期执行的被动查询的主程序
+an.py       用微信实现：每天执行一次的被动查询的主程序
+qan.py      用QQBot实现：每天执行一次的被动查询的主程序, python qan.py -q 156XXXXXX
+ann.py      用微信实现：可长期执行的被动查询的主程序
+qann.py     用QQBot实现：可长期执行的被动查询的主程序, python qann.py -q 156XXXXXX
 
 dao.py      用微信itchat实现主动查询的主程序
-qdao.py     用QQBot实现主动查询的主程序
+qdao.py     用QQBot实现主动查询的主程序, python qdao.py -q 156XXXXXX
 
 cb.db       SQLite3数据库:cb是可转债表，eb是可交换债表
+ann.py      用微信实现：可长期执行的被动查询的主程序
 
 cx_cb.py    主动查询可转债,交换债是否满足三线条件的模块
 
