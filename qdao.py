@@ -10,120 +10,95 @@ reload(sys)
 sys.setdefaultencoding("utf-8")
 
 import os, time
-from datetime import datetime
 
 from qqbot import QQBotSlot as qqbotslot, RunBot
 
-from cx_wh import getWH
-from cx_tk import getTK
-from cx_sp import getSP
-from cx_cb import getCB
-from cx_cx import getCX
-from cx_zg import getZG
-from cx_pm import getPM
-from cx_tqsk import getWeather
-from cx_jrtq import getToday
-from cx_index import getIndex
-from cx_raspi import getCpuTemp
-from cx_raspi import getDiskSpace
-
-# 获得帮助
-def getHelp():
-    print help_msg
-    return help_msg
-
-# 发送单条信息
-def sendMsg(result):
-    msg = result
-    print msg
-    print time.ctime()
-    print
-    bot.SendTo(contact, msg)
-
-#发送多条信息
-def sendMsgList(result):
-    msgList = result
-    print time.ctime()
-    for msg in msgList:
-        print msg
-        bot.SendTo(contact, msg)
-    print
+from cx_wh import getWH #查询外汇
+from cx_tk import getTK #查询转债，交换债条款
+from cx_sp import getSP #查询商品
+from cx_cb import getCB #查询全部入线的转债，交换债
+from cx_cx import getCX #查询指定转债，交换债 例：蓝标转债,cxlb
+from cx_zg import getZG #查询指定股票 例：平安银行 zg000001
+from cx_pm import getPM #查询PM
+from cx_tqsk import getWeather #查询天气实况
+from cx_jrtq import getToday #查询今日天气
+from cx_index import getIndex #查询证券指数
+from cx_raspi import getCpuTemp #查询CPU温度
+from cx_raspi import getDiskSpace #查询磁盘空间
 
 @qqbotslot
 def onQQMessage(bot, contact, member, content):
 
+    #print "接收到的content：", content
+
     try:
-        print "接收到的content：", content
-        cc = content[0:2]
-        print 'cc = ', cc
-        xx = content[2:]
-        print 'xx = ', xx
-    except:
-        cc = ''
+        if content[0:2] == 'cx':
+            result = getCX(content[2:])
+            bot.SendTo(contact, result)
 
-    if cc == 'cx':
-        result = getCX(xx)
-        print result
-        bot.SendTo(contact, result)
+        elif content[0:2] == 'tk':
+            result = getTK(content[2:])
+            bot.SendTo(contact, result)
 
-    elif cc == 'tk':
-        result = getTK(xx)
-        bot.SendTo(contact, result)
+        elif content[0:2] == 'zg':
+            result = getZG(content[2:]) #查询股票价名称,价格和涨跌幅
+            bot.SendTo(contact, result)
 
-    elif cc == 'zg':
-        result = getZG(xx) #查询股票价名称,价格和涨跌幅
-        bot.SendTo(contact, result)
+        elif content == 'h':
+            result = help_msg #显示帮助信息
+            bot.SendTo(contact, result)
 
-    elif content == 'h':
-        result = getHelp()
-        bot.SendTo(contact, result)
+        elif content == 'tq':
+            result = getToday()
+            bot.SendTo(contact, result)
 
-    elif content == 'tq':
-        result = getToday()
-        bot.SendTo(contact, result)
+        elif content == 'cpu':
+            result = getCpuTemp()
+            bot.SendTo(contact, result)
 
-    elif content == 'cpu':
-        result = getCpuTemp()
-        bot.SendTo(contact, result)
+        elif content == 'disk':
+            result = getDiskSpace()
+            bot.SendTo(contact, result)
 
-    elif content == 'disk':
-        result = getDiskSpace()
-        bot.SendTo(contact, result)
+        elif content == 'sk':
+            result = getWeather()
+            bot.SendTo(contact, result)
 
-    elif content == 'sk':
-        result = getWeather()
-        bot.SendTo(contact, result)
+        elif content == 'pm':
+            result = getPM()
+            bot.SendTo(contact, result)
 
-    elif content == 'pm':
-        result = getPM()
-        bot.SendTo(contact, result)
+        elif content == 'cb':
+            result = getCB()
+            for msg in result:
+                bot.SendTo(contact, msg)
 
-    elif content == 'cb':
-        result = getCB()
-        bot.SendTo(contact, result)
+        elif content == 'wh':
+            result = getWH()
+            for msg in result:
+                bot.SendTo(contact, msg)
 
-    elif content == 'wh':
-        result = getWH()
-        bot.SendTo(contact, result)
+        elif content == 'in':
+            result = getIndex()
+            for msg in result:
+                bot.SendTo(contact, msg)
 
-    elif content == 'in':
-        result = getIndex()
-        bot.SendTo(contact, result)
+        elif content == 'sp':
+            result = getSP()
+            for msg in result:
+                bot.SendTo(contact, msg)
 
-    elif content == 'sp':
-        result = getSP()
-        bot.SendTo(contact, result)
+        elif content == 'off':
+            bot.SendTo(contact, 'STOP QQBot')
+            bot.Stop()
 
-    elif content == 'off':
-        print time.ctime()
-        print 'STOP QQBot'
-        bot.SendTo(contact, 'STOP QQBot')
-        bot.Stop()
+        else:
+            print '============== What is it ? ==================='
+            bot.SendTo(contact, 'What is it ?')
 
-    else:
-        print time.ctime()
-        print 'What is it ?'
-        bot.SendTo(contact, 'What is it ?')
+    except Exception, e:
+        print 'QQBot ERROR :', e
+        bot.SendTo(contact, e)
 
 help_msg = u"""
 使用说明：
