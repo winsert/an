@@ -109,6 +109,8 @@ if __name__ == '__main__':
                     itchat.send(qsMsg, toUserName = userName)
 
             print time.asctime(time.localtime(time.time())) #显示查询时间
+            print endMsg
+            print
             itchat.send(endMsg, toUserName='filehelper')
             itchat.send(endMsg, toUserName = userName)
 
