@@ -1,8 +1,9 @@
-# an
-实时查询可转债、外汇等价格信息并进行分析的应用
+#实时查询可转债、外汇等价格信息并进行分析的应用
 
-an.py       用微信实现：每天执行一次的被动查询的主程序
-qan.py      用QQBot实现：每天执行一次的被动查询的主程序, python qan.py -q 156XXXXXX
+###an.py
+用微信实现：每天执行一次的被动查询的主程序
+###qan.py
+用QQBot实现：每天执行一次的被动查询的主程序, python qan.py -q 156XXXXXX
 ann.py      用微信实现：可长期执行的被动查询的主程序
 qann.py     用QQBot实现：可长期执行的被动查询的主程序, python qann.py -q 156XXXXXX
 
@@ -43,5 +44,8 @@ cx_wh.py    主动查询外汇的模块
 cxwh.py     被动查询外汇的模块
 
 cxzg.py     被动查询可转债正股的模块
+
+###jisilu.py
+用于从jisilu.cn上爬取新转债的数据，并加入到数据库中。
 
 xxx.py      临时修改文件
