@@ -21,13 +21,19 @@ def getIndex(code):
     try:
         resp = bsObjForm(url)
         tmp_list = resp.split(',')
-        index_price = str(tmp_list[3]) #获取指数的涨跌幅
+        index_price = float(tmp_list[3]) #获取指数的涨跌幅
         #print index_price
         return index_price
     except:
-        index_price = '0'
+        index_price = 0.0
         return index_price
 
-'''
 if __name__ == '__main__':
-''' 
+    
+    index = {u'上证50':'sh000016', u'深圳成指':'sz399001', u'上证指数':'sh000001', u'沪深300':'sz399300', u'中证500':'sh000905', u'创业板':'sz399006', u'B股':'sh000003', u'深次新股':'sz399678', u'国债':'sh000012'} #要查询的指数代码
+        
+    for k in index.keys():
+        value = index.get(k)
+        index_zz = getIndex(value)
+        index_msg = k+' : '+str(index_zz)
+        print index_msg
