@@ -1,5 +1,8 @@
 # 实时查询可转债、外汇等价格信息并进行分析的应用
 
+- adjust.py
+用于修改jian, jia, zhong, note, position数据
+
 - an.py
 用微信实现：每天执行一次的被动查询的主程序
 
