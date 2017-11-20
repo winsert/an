@@ -19,7 +19,7 @@ def CX(alias):
     try:
         conn = sqlite3.connect('cb.db')
         curs = conn.cursor()
-        sql = "select name, jian, jia, zhong, note, position from cb where Alias = '%s'" %cx
+        sql = "select name, jian, jia, zhong, note, position, zgj from cb where Alias = '%s'" %cx
         curs.execute(sql)
         tmp = curs.fetchall()
         curs.close()
@@ -31,6 +31,7 @@ def CX(alias):
         zhong = tmp[0][3] #建仓价
         note = tmp[0][4] #说明
         position = tmp[0][5] #持仓
+        zgj = tmp[0][6] #转股价
 
         print
         print u'名  称：', name
@@ -39,6 +40,7 @@ def CX(alias):
         print u'重仓价：', zhong
         print u'说  明：', note
         print u'持  仓：', position
+        print u'转股价：', zgj
         print
 
         tmp.append(jian)
@@ -46,6 +48,7 @@ def CX(alias):
         tmp.append(zhong)
         tmp.append(note)
         tmp.append(position)
+        tmp.append(zgj)
         return tmp 
 
     except Exception, e :
@@ -152,6 +155,26 @@ def Position(alias, position):
         print 'Position() ERROR :', e
         sys.exit()
 
+#对指定转债的'转股价'进行修改
+def ZGJ(alias, zgj):
+    alias = alias
+    zgj = float(zgj)
+
+    try:
+        conn = sqlite3.connect('cb.db')
+        curs = conn.cursor()
+        sql = "UPDATE cb SET zgj = ? WHERE Alias = ?"
+        curs.execute(sql, (zgj, alias))
+        conn.commit()
+        curs.close()
+        conn.close()
+
+        print u'转股价 已修改为：', str(zgj)
+
+    except Exception, e:
+        print 'ZGJ() ERROR :', e
+        sys.exit()
+
 if  __name__ == '__main__': 
 
     msg = u"""
@@ -210,3 +233,11 @@ if  __name__ == '__main__':
         Position(alias, position)
     else:
         print u'持仓 没有修改！'
+
+    print
+    print u'原 转股价：', str(cx[6])
+    zgj = raw_input(u"请输入新 转股价：")
+    if zgj != '':
+        ZGJ(alias, zgj)
+    else:
+        print u'转股价 没有修改！'
