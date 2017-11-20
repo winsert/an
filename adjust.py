@@ -241,3 +241,7 @@ if  __name__ == '__main__':
         ZGJ(alias, zgj)
     else:
         print u'转股价 没有修改！'
+
+    print
+    print u'全部修改结果如下：'
+    cx = CX(alias)
