@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-# 本程序用于获取可转债、可交换债的最新价，三线价格，回售价等数据
+# 本程序用于修改jian, jia, zhong, note, position, zgj数据
 
 __author__ = 'winsert@163.com'
 
