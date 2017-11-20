@@ -153,7 +153,18 @@ def Position(alias, position):
         sys.exit()
 
 if  __name__ == '__main__': 
+
+    msg = u"""
+    本程序用于修改：
+    - 建仓价 jian
+    - 加仓价 jia
+    - 重仓价 zhong
+    - 说  明 note
+    - 持  仓 position
+    - 转股价 zgj
+    """
     print
+    print msg
     alias = raw_input(u'输入可转债的简称缩写：')
     cx = CX(alias)
     yn = raw_input(u'是否要修改(y/n)？')
