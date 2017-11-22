@@ -96,7 +96,7 @@ def record(url):
     record.append(position)
     HPrice = 130.00 #最高价默认为130.00
     record.append(HPrice)
-    LPrice = 100.00 #最低价默认为100.00
+    LPrice = 110.00 #最低价默认为100.00
     record.append(LPrice)
 
     jian = float(raw_input("请设定'建仓价'："))
