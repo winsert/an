@@ -134,14 +134,15 @@ def record(url):
     record.append(unicode(hs))
 
     tmp_list[42] #利率
+    print tmp_list[42]
     if len(tmp_list[42]) == 1:
         ll = '1.0,1.0,1.0,1.0,1.0'
     else:
         for i in range(1,len(tmp_list[42])):
             try:
-                f  = float(tmp_list[42][i][:4])
-                ll = ll + tmp_list[42][i][:4] + ','
-            except:
+                #f  = float(tmp_list[42][i][:3])
+                ll = ll + tmp_list[42][i][:3] + ','
+            except Exception, e:
                 continue
         ll = ll[:-1]
     record.append(ll)
