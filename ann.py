@@ -93,7 +93,7 @@ while 1:
 
         print OKMsg
         print
-        time.sleep(180)  # 延时查询的秒数,180即延时3分钟查询一次。
+        time.sleep(60)  # 延时查询的秒数,180即延时3分钟查询一次。
 
     elif datetime.now() >= time2 and datetime.now() <= time5 :
             
