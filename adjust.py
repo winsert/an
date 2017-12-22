@@ -19,7 +19,7 @@ def CX(alias):
     try:
         conn = sqlite3.connect('cb.db')
         curs = conn.cursor()
-        sql = "select name, jian, jia, zhong, note, position, zgj, ll from cb where Alias = '%s'" %cx
+        sql = "select name, jian, jia, zhong, note, position, zgj, ll, code from cb where Alias = '%s'" %cx
         curs.execute(sql)
         tmp = curs.fetchall()
         curs.close()
@@ -32,10 +32,12 @@ def CX(alias):
         note = tmp[0][4] #说明
         position = tmp[0][5] #持仓
         zgj = tmp[0][6] #转股价
-        ll = tmp[0][7] #转股价
+        ll = tmp[0][7] #利率
+        code = tmp[0][8] #代码
 
         print
         print u'名  称：', name
+        print u'代  码：', code
         print u'建仓价：', jian
         print u'加仓价：', jia
         print u'重仓价：', zhong
