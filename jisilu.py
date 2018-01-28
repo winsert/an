@@ -40,12 +40,15 @@ def get(url):
 
     try:
         request = urllib2.Request(url=url, headers=headers)
+        print "request is done !"
         result = urllib2.urlopen(request).read()
+        print "result is done !"
         #sf = open('./soup.txt', 'w')
         #print >> sf, result
         #sf.close()
         #result = open('./soup.txt', 'r')
         soup = BeautifulSoup(result, 'lxml').find('div', id="tc_data").find('table', class_='jisilu_tcdata').find_all('td')
+        print "soup is done !"
         #result.close()
         return soup
     except Exception, e:
