@@ -127,10 +127,8 @@ def getCX(alias):
             #print msg
             return msg
 
-    #except Exception, e:
-        #print e
-
-    except :
+    except Exception, e:
+        print e
         msg = u'查询可转债:%s不存在！' %cx
         print msg
         return msg
