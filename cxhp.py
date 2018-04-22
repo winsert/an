@@ -67,7 +67,7 @@ def getHP():
             if position > 0:
                 zz = float(getZZ(zzcode)) #查询转债价格
 
-                if zz > hp:
+                if zz > hp + 0.5: #比原最高价高0.5元
                     getSQLite(code, zz)
                     hpmsg = cc[0]+u': '+str(position)+u'张'+u'\n最新价:'+str(zz)+u' >前高价:'+str(hp)
                     hpMsg.append(hpmsg)
