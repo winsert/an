@@ -78,5 +78,11 @@ SQLite3数据库:cb是可转债表，eb是可交换债表
 - jisilu.py
 用于从jisilu.cn上爬取新转债的数据，并加入到数据库中。
 
+- exchange.py
+用于记录转债的每笔成交记录
+
+- record.py
+用于查询转债的每笔成交记录
+
 - xxx.py
 临时修改文件
