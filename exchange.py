@@ -116,9 +116,11 @@ if  __name__ == '__main__':
     
     msg = u"""
     本程序用于记录每笔交易数据：
+    - 日  期 date
     - 成交价 price
     - 成交量 amount
     - 持  仓 position
+    - 平均价 avg
     """
     print
     print msg
