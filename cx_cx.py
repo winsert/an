@@ -75,7 +75,7 @@ def getCX(alias):
     try:
         conn = sqlite3.connect('cb.db')
         curs = conn.cursor()
-        sql = "select name, Code, zgcode, Prefix, jian, jia, zhong, Note, zgj, hsqsr, hsj, dqr, position, shj, ll, ce, qs, qss, zgqsr from cb where Alias = '%s'" %cx
+        sql = "select name, Code, zgcode, Prefix, jian, jia, zhong, Note, zgj, hsqsr, hsj, dqr, position, shj, ll, ce, qs, qss, zgqsr, AVG from cb where Alias = '%s'" %cx
         curs.execute(sql)
         tmp = curs.fetchall()
         curs.close()
@@ -117,13 +117,14 @@ def getCX(alias):
         qs = tmp[0][16]
         qss = tmp[0][17]
         zgqsr = str(tmp[0][18])
+        avg = str(tmp[0][19]) #平均持仓成本价
 
         if float(tmp[0][10]) == 0.0:
-            msg = tmp[0][0]+' '+tmp[0][2]+u'\n可转债 '+tmp[0][1]+' : '+str(position)+u'张\n'+u'最新价:'+str(zz)+u'  溢价率:'+str(yjl)+u'%'+u'\n建:'+str(tmp[0][4])+u'  加:'+str(tmp[0][5])+u'  重:'+str(tmp[0][6])+u'\n'+tmp[0][7]+'\n'+u'\n转股价:'+str(zgj)+u'\n转股起始日:'+zgqsr+u'\n正股价:'+str(zg)+u' 涨跌幅:'+str(zg_zdf)+'%'+u'\n强赎价:'+str(qsj)+u'\n已强赎:'+str(qs)+u'天'+u'  剩余:'+str(qss)+u'天'+u'\n到期价值:'+str(dqjz)+u'\n到期收益率:'+str(dqsyl)+'%'+u'\n到期年化收益率:'+str(dqnh)+'%'+u'\n回售起始日:无'+u'\n回售价:无'+u'\n到期日:'+str(dqr)+u'\n剩余年限:'+str(synx)
+            msg = tmp[0][0]+u'：'+tmp[0][1]+u'\n正股代码：'+tmp[0][2]+u'\n持仓:'+str(position)+u'张'+u' 平均价:'+avg+u'元\n'+'\n'+u'最新价:'+str(zz)+u'  溢价率:'+str(yjl)+u'%'+u'\n建:'+str(tmp[0][4])+u'  加:'+str(tmp[0][5])+u'  重:'+str(tmp[0][6])+u'\n'+tmp[0][7]+'\n'+u'\n转股价:'+str(zgj)+u'\n转股起始日:'+zgqsr+u'\n正股价:'+str(zg)+u' 涨跌幅:'+str(zg_zdf)+'%'+u'\n强赎价:'+str(qsj)+u'\n已强赎:'+str(qs)+u'天'+u'  剩余:'+str(qss)+u'天'+u'\n到期价值:'+str(dqjz)+u'\n到期收益率:'+str(dqsyl)+'%'+u'\n到期年化收益率:'+str(dqnh)+'%'+u'\n回售起始日:无'+u'\n回售价:无'+u'\n到期日:'+str(dqr)+u'\n剩余年限:'+str(synx)
             #print msg
             return msg
         else:
-            msg = tmp[0][0]+' '+tmp[0][2]+u'\n可转债 '+tmp[0][1]+' : '+str(position)+u'张\n'+u'最新价:'+str(zz)+u'  溢价率:'+str(yjl)+u'%'+u'\n建:'+str(tmp[0][4])+u'  加:'+str(tmp[0][5])+u'  重:'+str(tmp[0][6])+u'\n'+tmp[0][7]+'\n'+u'\n转股价:'+str(zgj)+u'\n转股起始日:'+zgqsr+u'\n正股价:'+str(zg)+u' 涨跌幅:'+str(zg_zdf)+'%'+u'\n强赎价:'+str(qsj)+u'\n已强赎:'+str(qs)+u'天'+u'  剩余:'+str(qss)+u'天'+u'\n到期价值:'+str(dqjz)+u'\n到期收益率:'+str(dqsyl)+'%'+u'\n到期年化收益率:'+str(dqnh)+'%'+u'\n回售起始日:'+str(tmp[0][9])+u'\n回售价:'+str(tmp[0][10])+u'\n到期日:'+str(dqr)+u'\n剩余年限:'+str(synx)
+            msg = tmp[0][0]+u'：'+tmp[0][1]+u'\n正股代码：'+tmp[0][2]+u'\n持仓:'+str(position)+u'张'+u' 平均价:'+avg+u'元\n'+'\n'+u'最新价:'+str(zz)+u'  溢价率:'+str(yjl)+u'%'+u'\n建:'+str(tmp[0][4])+u'  加:'+str(tmp[0][5])+u'  重:'+str(tmp[0][6])+u'\n'+tmp[0][7]+'\n'+u'\n转股价:'+str(zgj)+u'\n转股起始日:'+zgqsr+u'\n正股价:'+str(zg)+u' 涨跌幅:'+str(zg_zdf)+'%'+u'\n强赎价:'+str(qsj)+u'\n已强赎:'+str(qs)+u'天'+u'  剩余:'+str(qss)+u'天'+u'\n到期价值:'+str(dqjz)+u'\n到期收益率:'+str(dqsyl)+'%'+u'\n到期年化收益率:'+str(dqnh)+'%'+u'\n回售起始日:'+str(tmp[0][9])+u'\n回售价:'+str(tmp[0][10])+u'\n到期日:'+str(dqr)+u'\n剩余年限:'+str(synx)
             #print msg
             return msg
 
