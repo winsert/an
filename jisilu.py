@@ -117,7 +117,12 @@ def record(url):
     record.append(tmp_list[10][0]) #转股起始日
     record.append(tmp_list[18][0]) #转股价
     record.append(tmp_list[12][0]) #回售起始日
-    record.append(tmp_list[20][0]) #回售价
+
+    if tmp_list[20][0] != '-': #判断是否有回售价
+        record.append(tmp_list[20][0]) #有回售价
+    else:
+        record.append(0.0) #无回售价
+
     record.append(tmp_list[14][0]) #到期日
     record.append(tmp_list[22][0]) #赎回价
 
