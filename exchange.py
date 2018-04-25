@@ -90,28 +90,6 @@ def Position(code, position, avg):
         print 'Position() ERROR :', e
         sys.exit()
 
-# 求持仓平均成本价
-def AVG(code):
-    code = code
-    tmp = []
-
-    try:
-        conn = sqlite3.connect('cb.db')
-        curs = conn.cursor()
-        sql = "SELECT sum(price*amount)/sum(amount) from exchange WHERE Code = %s" % code
-        curs.execute(sql)
-        tmp = curs.fetchall()
-        avg = tmp[0][0]
-        conn.commit()
-        curs.close()
-        conn.close()
-
-        return avg
-
-    except Exception, e:
-        print 'AVG() ERROR :', e
-        sys.exit()
-
 if  __name__ == '__main__': 
     
     msg = u"""
@@ -149,7 +127,6 @@ if  __name__ == '__main__':
         date = TD() #生成日期
         EX(code, date, price, amount) #生成新交易记录
         position = cx_position + amount #更新持仓数据
-        #avg = round(AVG(code),2) #计算平均持仓成本
         avg = round((cx_position*cx_avg + amount*price) / position, 2) #计算平均持仓成本
         print u'    名  称 ：' + cx_name
         print u'    代  码 ：' + code
