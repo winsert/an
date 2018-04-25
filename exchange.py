@@ -36,7 +36,7 @@ def CX(code):
         print u'    平均价： ' + str(avg) + u'元'
         print
 
-        return name, position
+        return name, position, avg
 
     except Exception, e :
         print 'CX() Error:', e
@@ -125,36 +125,37 @@ if  __name__ == '__main__':
     print
     print msg
     code = raw_input(u'输入可转债的代码：')
-    cx_name, cx_position = CX(code) #返回指定转债name, position
+    cx_name, cx_position, cx_avg = CX(code) #返回指定转债name, position, avg
 
     yn1 = raw_input(u'是否要修改(y/n)？')
     if yn1 == 'n':
         sys.exit()
 
     print
-    price = raw_input(u"请输入 成交价 ：")
-    amount = raw_input(u"请输入 成交量 ：")
+    price = float(raw_input(u"请输入 成交价 ："))
+    amount = int(raw_input(u"请输入 成交量 ："))
 
     print
     print u'将修改以下转债数据：'
     print
     print u'    名  称 ：' + cx_name
     print u'    代  码 ：' + code
-    print u'    成交价 ：' + price
-    print u'    成交量 ：' + amount
+    print u'    成交价 ：' + str(price)
+    print u'    成交量 ：' + str(amount)
     print
 
     yn2 = raw_input(u'是否要修改(y/n)？')
     if yn2 == 'y':
         date = TD() #生成日期
         EX(code, date, price, amount) #生成新交易记录
-        position = int(cx_position) + int(amount) #更新持仓数据
-        avg = round(AVG(code),2) #计算平均持仓成本
+        position = cx_position + amount #更新持仓数据
+        #avg = round(AVG(code),2) #计算平均持仓成本
+        avg = round((cx_position*cx_avg + amount*price) / position, 2) #计算平均持仓成本
         print u'    名  称 ：' + cx_name
         print u'    代  码 ：' + code
         print u'    日  期 ：' + date
-        print u'    成交价 ：' + price
-        print u'    成交量 ：' + amount
+        print u'    成交价 ：' + str(price)
+        print u'    成交量 ：' + str(amount)
         print u'    持仓量 ：' + str(position)
         print u'    平均价 ：' + str(avg)
         print
