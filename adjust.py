@@ -19,7 +19,7 @@ def CX(alias):
     try:
         conn = sqlite3.connect('cb.db')
         curs = conn.cursor()
-        sql = "select name, jian, jia, zhong, note, position, zgj, ll, code from cb where Alias = '%s'" %cx
+        sql = "select name, jian, jia, zhong, note, position, zgj, ll, code, AVG from cb where Alias = '%s'" %cx
         curs.execute(sql)
         tmp = curs.fetchall()
         curs.close()
@@ -31,6 +31,7 @@ def CX(alias):
         zhong = tmp[0][3] #建仓价
         note = tmp[0][4] #说明
         position = tmp[0][5] #持仓
+        avg = tmp[0][9] #平均成本价
         zgj = tmp[0][6] #转股价
         ll = tmp[0][7] #利率
         code = tmp[0][8] #代码
@@ -43,6 +44,7 @@ def CX(alias):
         print u'重仓价：', zhong
         print u'说  明：', note
         print u'持  仓：', position
+        print u'平均价：', avg
         print u'转股价：', zgj
         print u'利  率：', ll
         print
@@ -52,6 +54,7 @@ def CX(alias):
         tmp.append(zhong)
         tmp.append(note)
         tmp.append(position)
+        tmp.append(avg)
         tmp.append(zgj)
         tmp.append(ll)
         return tmp 
@@ -160,6 +163,26 @@ def Position(alias, position):
         print 'Position() ERROR :', e
         sys.exit()
 
+#对指定转债的'平均价'进行修改
+def AVG(alias, avg):
+    alias = alias
+    avg = float(avg)
+
+    try:
+        conn = sqlite3.connect('cb.db')
+        curs = conn.cursor()
+        sql = "UPDATE cb SET AVG = ? WHERE Alias = ?"
+        curs.execute(sql, (avg, alias))
+        conn.commit()
+        curs.close()
+        conn.close()
+
+        print u'平均价 已修改为：', str(avg)
+
+    except Exception, e:
+        print 'AVG() ERROR :', e
+        sys.exit()
+
 #对指定转债的'转股价'进行修改
 def ZGJ(alias, zgj):
     alias = alias
@@ -209,6 +232,7 @@ if  __name__ == '__main__':
     - 重仓价 zhong
     - 说  明 note
     - 持  仓 position
+    - 平均价 avg
     - 转股价 zgj
     - 利  率 ll
     """
@@ -261,7 +285,15 @@ if  __name__ == '__main__':
         print u'持仓 没有修改！'
 
     print
-    print u'原 转股价：', str(cx[6])
+    print u'原 平均价：', str(cx[6])
+    avg = raw_input(u"请输入新 平均价：")
+    if avg !='':
+        AVG(alias, avg)
+    else:
+        print u'平均价 没有修改！'
+
+    print
+    print u'原 转股价：', str(cx[7])
     zgj = raw_input(u"请输入新 转股价：")
     if zgj != '':
         ZGJ(alias, zgj)
@@ -269,7 +301,7 @@ if  __name__ == '__main__':
         print u'转股价 没有修改！'
 
     print
-    print u'原 利  率：', str(cx[7])
+    print u'原 利  率：', str(cx[8])
     ll = raw_input(u"请输入新 利  率：")
     if ll != '':
         LL(alias, ll)
