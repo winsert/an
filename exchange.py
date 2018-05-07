@@ -138,4 +138,5 @@ if  __name__ == '__main__':
         print
         Position(code, position, avg) #更新cb表中的position和avg数据
     else:
+        print u'没有修改数据!'
         sys.exit()
