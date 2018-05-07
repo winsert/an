@@ -97,26 +97,26 @@ if __name__ == '__main__':
                 itchat.send(hpMsg, toUserName = userName)
 
         # 查询外汇价格是否低于预设值
-        WHlist = getWH()
-        if len(WHlist) == 0: #没有满足条件的外汇
-            print WHmsg
-            print
-        else:
-            for whMsg in WHlist: #有满足条件的外汇
-                print whMsg
-                itchat.send(whMsg, toUserName = userName)
+        #WHlist = getWH()
+        #if len(WHlist) == 0: #没有满足条件的外汇
+            #print WHmsg
+            #print
+        #else:
+            #for whMsg in WHlist: #有满足条件的外汇
+                #print whMsg
+                #itchat.send(whMsg, toUserName = userName)
 
         # 查询基金价格是否低于预设值
-        JJlist = getJJ()
-        if len(JJlist) == 0: #没有满足条件的基金
-            print JJmsg
-            print
-        else:
-            for jjMsg in JJlist: #有满足条件的基金
-                print jjMsg
-                itchat.send(jjMsg, toUserName = userName)
+        #JJlist = getJJ()
+        #if len(JJlist) == 0: #没有满足条件的基金
+            #print JJmsg
+            #print
+        #else:
+            #for jjMsg in JJlist: #有满足条件的基金
+                #print jjMsg
+                #itchat.send(jjMsg, toUserName = userName)
 
-        time.sleep(150)  # 延时查询的秒数,300即延时5分钟查询一次。
+        time.sleep(60)  # 延时查询的秒数,300即延时5分钟查询一次。
 
     # 查询指数收盘的涨跌情况
     index = {u'上证50':'sh000016', u'沪深300':'sz399300', u'中证500':'sh000905', u'创业板':'sz399006', u'B股':'sh000003', u'国债':'sh000012'} #要查询的指数代码
@@ -124,7 +124,7 @@ if __name__ == '__main__':
     for k in index.keys():
         value = index.get(k)
         index_zz = getIndex(value)
-        index_msg = k+' : '+index_zz
+        index_msg = k+' : '+str(index_zz)
         print index_msg
         #itchat.send(index_msg, 'filehelper')
         itchat.send(index_msg, toUserName = userName)
