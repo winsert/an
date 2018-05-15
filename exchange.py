@@ -127,7 +127,10 @@ if  __name__ == '__main__':
         date = TD() #生成日期
         EX(code, date, price, amount) #生成新交易记录
         position = cx_position + amount #更新持仓数据
-        avg = round((cx_position*cx_avg + amount*price) / position, 2) #计算平均持仓成本
+        if position == 0: #清空持仓
+            avg = 0
+        else:
+            avg = round((cx_position*cx_avg + amount*price) / position, 2) #计算平均持仓成本
         print u'    名  称 ：' + cx_name
         print u'    代  码 ：' + code
         print u'    日  期 ：' + date
