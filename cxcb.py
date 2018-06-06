@@ -61,9 +61,11 @@ def getCB():
     for cc in tmp:
         prefix = cc[3]
 
-        if prefix != 'QS' :  #QS代表已强赎
+        #if prefix != 'QS' and prefix != 'Q':  #QS代表已强赎,Q代表忽略。
+        if prefix != 'QS':  #QS代表已强赎
 
             zzcode = cc[3]+cc[1] #前缀+转债代码
+            #print zzcode
             code = cc[1] #转债代码
             position = cc[4] #仓位
             jian = float(cc[5]) #建仓价
