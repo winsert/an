@@ -18,6 +18,12 @@
 - dao.py
 用微信itchat实现主动查询的主程序
 
+- dd.py
+记录正股，转债每日交易数据的程序
+
+- dd.db
+记录正股，转债每日交易数据的数据库
+
 - qdao.py
 用QQBot实现主动查询的主程序, python qdao.py -q 156XXXXXX
 
