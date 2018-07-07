@@ -26,7 +26,7 @@ def getDATE():
         day = str(day)
 
     today = year+month+day
-    print today
+    #print today
     return today
 
 # 用于解析URL页面
@@ -100,8 +100,30 @@ def getDQJZ(synx, shj,  ll):
     dqjz = dqjz + shj
     return dqjz
 
-def getRECORD():
-    pass
+#将查询结果写入数据库dd.db
+def getRECORD(today, code, zg_s, zg_e, zg_h, zg_l, zz_s, zz_e, zz_h, zz_l, zz_z, zz_j, yjl, dqnh):
+    today = today #日期
+    code = 'c'+code #转债代码
+    zg_s = zg_s #正股开盘价
+    zg_e = zg_e #正股收盘价
+    zg_h = zg_h #正股最高价
+    zg_l = zg_l #正股最低价
+    zz_s = zz_s #转债开盘价
+    zz_e = zz_e #转债收盘价
+    zz_h = zz_h #转债最高价
+    zz_l = zz_l #转债zuid价
+    zz_z = zz_z #转债成交张数
+    zz_j = zz_j #转债成交金额
+    yjl = yjl   #溢价率
+    dqnh = dqnh #年化收益率
+
+    conn = sqlite3.connect('dd.db')
+    create_tb_cmd = "CREATE TABLE IF NOT EXISTS %s (today text, zg_s text, zg_e text, zg_h text, zg_l text, zz_s text, zz_e text, zz_h text, zz_l text, zz_z text, zz_j text, yjl text, dqnh text);" %code
+    conn.execute(create_tb_cmd)
+    insert_dt_cmd = "INSERT INTO %s (today, zg_s, zg_e, zg_h, zg_l, zz_s, zz_e, zz_h, zz_l, zz_z, zz_j, yjl, dqnh) VAlUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" %code
+    conn.execute(insert_dt_cmd, (today, zg_s, zg_e, zg_h, zg_l, zz_s, zz_e, zz_h, zz_l, zz_z, zz_j, yjl, dqnh))
+    conn.commit()
+    conn.close()
 
 # 主程序
 def getCX(today):
@@ -127,8 +149,8 @@ def getCX(today):
             ll = cb[7] #每年的利率
             ce = cb[8] #区别转债和交换债
 
-            if prefix != 'QS' and ce != 'e':
-            #if cb[1] == '123005':
+            #if prefix != 'QS' and ce != 'e':
+            if cb[1] == '123005':
 
                 zgcode = cb[3]+cb[2] #正股代码
                 zg_s, zg_e, zg_h, zg_l = getZG(zgcode) #查询正股开盘，收盘，最高，最低价数据
@@ -141,7 +163,7 @@ def getCX(today):
                     #print name, zz_s, zz_e, zz_h, zz_l, zz_z, zz_j
                     
                     zgjz = (100/float(zgj))*float(zg_e) #计算转股价值
-                    yjl = round((float(zz_e) - zgjz)/zgjz*100, 2) #计算溢价率
+                    yjl = str(round((float(zz_e) - zgjz)/zgjz*100, 2)) #计算溢价率
                     #print name, zgjz, yjl
 
                     synx = getSYNX(dqr) #计算剩余年限
@@ -149,10 +171,10 @@ def getCX(today):
                     #print name, dqjz
 
                     dqsyl = round((dqjz/float(zz_e) - 1) * 100, 3) #计算到期收益率
-                    dqnh = round(dqsyl/synx, 2) #计算到期年化收益率
-                    #print today, name, zz_s, zz_e, zz_h, zz_l, zz_z, zz_j, yjl, dqnh
+                    dqnh = str(round(dqsyl/synx, 2)) #计算到期年化收益率
+                    print today, name, zz_s, zz_e, zz_h, zz_l, zz_z, zz_j, yjl, dqnh
 
-                    #getRECORD(today, code, zg_s, zg_e, zg_h, zg_l, zz_s, zz_e, zz_h, zz_l, zz_z, zz_j, yjl, dqnh)
+                    getRECORD(today, code, zg_s, zg_e, zg_h, zg_l, zz_s, zz_e, zz_h, zz_l, zz_z, zz_j, yjl, dqnh)
         
     except Exception, e:
         print e
