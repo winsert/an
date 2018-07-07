@@ -120,9 +120,16 @@ def getRECORD(today, code, zg_s, zg_e, zg_h, zg_l, zz_s, zz_e, zz_h, zz_l, zz_z,
     conn = sqlite3.connect('dd.db')
     create_tb_cmd = "CREATE TABLE IF NOT EXISTS %s (today text, zg_s text, zg_e text, zg_h text, zg_l text, zz_s text, zz_e text, zz_h text, zz_l text, zz_z text, zz_j text, yjl text, dqnh text);" %code
     conn.execute(create_tb_cmd)
-    insert_dt_cmd = "INSERT INTO %s (today, zg_s, zg_e, zg_h, zg_l, zz_s, zz_e, zz_h, zz_l, zz_z, zz_j, yjl, dqnh) VAlUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" %code
-    conn.execute(insert_dt_cmd, (today, zg_s, zg_e, zg_h, zg_l, zz_s, zz_e, zz_h, zz_l, zz_z, zz_j, yjl, dqnh))
+    curs = conn.cursor()
+    sql_cmd = "select count(*) FROM %s WHERE today = %s" %(code, today)
+    curs.execute(sql_cmd)
+    lens = curs.fetchall()[0][0]
+    print lens
+    if lens == 0:
+        insert_dt_cmd = "INSERT INTO %s (today, zg_s, zg_e, zg_h, zg_l, zz_s, zz_e, zz_h, zz_l, zz_z, zz_j, yjl, dqnh) VAlUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" %code
+        conn.execute(insert_dt_cmd, (today, zg_s, zg_e, zg_h, zg_l, zz_s, zz_e, zz_h, zz_l, zz_z, zz_j, yjl, dqnh))
     conn.commit()
+    curs.close()
     conn.close()
 
 # 主程序
@@ -149,8 +156,8 @@ def getCX(today):
             ll = cb[7] #每年的利率
             ce = cb[8] #区别转债和交换债
 
-            #if prefix != 'QS' and ce != 'e':
-            if cb[1] == '123005':
+            if prefix != 'QS' and ce != 'e':
+            #if cb[1] == '123005':
 
                 zgcode = cb[3]+cb[2] #正股代码
                 zg_s, zg_e, zg_h, zg_l = getZG(zgcode) #查询正股开盘，收盘，最高，最低价数据
