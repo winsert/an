@@ -7,7 +7,7 @@ __author__ = 'winsert@163.com'
 
 import sqlite3, random
 import numpy as np
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 # 查询转债的代码
 def getCode():
@@ -82,15 +82,35 @@ def getCbData(date, codes):
 
 #画散点图
 def getScat(xy):
-    x = [] #
-    y = []
+    x = [] #溢价率
+    y = [] #到期年化收益率
     for i in xy:
-        x.append(i[0])
-        y.append(i[1])
-    np.array(x)
-    np.array(y)
-    print x
-    print type(y)
+        x.append(round((float(i[0]) / 10), 2))
+        y.append(float(i[1]))
+    
+    X = np.array(x)
+    Y = np.array(y)
+    
+    plt.scatter(X, Y, s=10, c='b', alpha=0.7)
+
+    plt.xlim(-5, 20)
+    #plt.xlabel('premium rate')
+    #plt.xticks(())  # ignore xticks
+    plt.ylim(-10, 10)
+    #plt.ylabel('annualized rate of return')
+    #plt.yticks(())  # ignore yticks
+
+    ax = plt.gca()
+    ax.spines['right'].set_color('none')
+    ax.spines['top'].set_color('none')
+
+    ax.xaxis.set_ticks_position('bottom')
+    ax.spines['bottom'].set_position(('data', 0))
+
+    ax.yaxis.set_ticks_position('left')
+    ax.spines['left'].set_position(('data', 0))
+
+    plt.show()
 
 
 if __name__ == '__main__':
