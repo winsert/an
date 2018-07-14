@@ -81,23 +81,25 @@ def getCbData(date, codes):
         print e
 
 #画散点图
-def getScat(xy):
+def getScat(xy, date):
     x = [] #溢价率
     y = [] #到期年化收益率
     for i in xy:
-        x.append(round((float(i[0]) / 10), 2))
+        #x.append(round((float(i[0]) / 10), 2))
+        x.append(float(i[0]))
         y.append(float(i[1]))
     
     X = np.array(x)
     Y = np.array(y)
     
-    plt.scatter(X, Y, s=10, c='b', alpha=0.7)
+    plt.scatter(X, Y, s=3, c='b', alpha=1)
 
-    plt.xlim(-5, 20)
-    #plt.xlabel('premium rate')
+    plt.title(date)
+    plt.xlim(-20, 175)
+    plt.xlabel('premium rate')
     #plt.xticks(())  # ignore xticks
     plt.ylim(-10, 10)
-    #plt.ylabel('annualized rate of return')
+    plt.ylabel('annualized rate of return')
     #plt.yticks(())  # ignore yticks
 
     ax = plt.gca()
@@ -124,6 +126,6 @@ if __name__ == '__main__':
     if d != 0:
         print u"\n即将开始查询 " + str(date) + u" 的数据...\n"
         xy_list = getCbData(date, codes) #查询转债的数据
-        getScat(xy_list) #画散点图
+        getScat(xy_list, date) #画散点图
     else:
         print u'\n' + str(date) + u" 的数据不存在！\n"
