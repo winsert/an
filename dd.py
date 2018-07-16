@@ -188,4 +188,9 @@ def getCX(today):
         
 if __name__ == '__main__':
     today = getDATE() #生成日期
-    getCX(today)
+    print u"是否增加 " + today + u" 的数据",
+    yn = raw_input(" (y/n) ?")
+    if yn == 'y':
+        getCX(today)
+    else:
+        print u"没有增加新数据！"
