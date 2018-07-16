@@ -92,7 +92,7 @@ def getScat(xy, date):
     X = np.array(x)
     Y = np.array(y)
     
-    plt.scatter(X, Y, s=3, c='b', alpha=1)
+    plt.scatter(X, Y, s=10, c='blue', alpha=1)
 
     plt.title(date)
     plt.xlim(-20, 175)
@@ -117,8 +117,8 @@ def getScat(xy, date):
 
 if __name__ == '__main__':
     
-    date = int(raw_input("请输入查询日期，例：20180709 > "))
-    while date < 20180709:
+    date = int(raw_input("请输入查询日期，例：20180707 > "))
+    while date < 20180707:
         date = int(raw_input("请输入开始日期，例：20180709 > "))
     
     codes = getCode() #查询转债的代码

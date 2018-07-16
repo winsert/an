@@ -125,7 +125,7 @@ def getScat(xy, date):
     X = np.array(x)
     Y = np.array(y)
     
-    plt.scatter(X, Y, s=3, c='b', alpha=1)
+    plt.scatter(X, Y, s=10, c='b', alpha=1)
 
     plt.title(date)
     plt.xlim(-20, 175)
