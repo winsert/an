@@ -24,6 +24,17 @@
 - dd.db
 记录正股，转债每日交易数据的数据库
 
+- dayScat.py
+画某一天的溢价率，年化收益率的散点图
+
+- daysScat.py
+画多天的溢价率，年化收益率的散点图
+
+- daysAniScat.py
+动画演示"daysScat.py"
+
+- daysPlot.py
+画成交金额的折线图
 - qdao.py
 用QQBot实现主动查询的主程序, python qdao.py -q 156XXXXXX
 
