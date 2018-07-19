@@ -188,9 +188,26 @@ def getCX(today):
         
 if __name__ == '__main__':
     today = getDATE() #生成日期
-    print u"是否增加 " + today + u" 的数据",
-    yn = raw_input(" (y/n) ?")
+    print u"是否增加 " + today + u" 的数据？",
+    yn = raw_input("(y/n) ?")
     if yn == 'y':
+        print u"\n正在增加 " + today + u" 的数据......"
         getCX(today)
+        print u"\n操作已完成。"
+    elif yn == 'n':
+        print u"\n今天是：" + today
+        date = int(raw_input("请输入日期，例：20180707 > "))
+        while date > int(today):
+            print u"\n今天是：" + today
+            date = int(raw_input("请输入正确日期，例：20180707 > "))
+        print u"将增加 " + str(date) + u" 的数据？",
+        ny = raw_input("(y/n) ?")
+        if ny == 'y':
+            print u"\n正在增加 " +str(date) + u" 的数据......"
+            ds = str(date) 
+            getCX(ds)
+            print u"\n操作已完成。"
+        else:
+            print u"\n没有增加新数据！"    
     else:
-        print u"没有增加新数据！"
+        print u"\n没有增加新数据！"
