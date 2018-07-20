@@ -138,7 +138,7 @@ def getPlot(cjje_lists, date_txt):
         x.append(float(i[0]))
         y.append(float(i[1]))
     
-    plt.figure(figsize=(16, 5))
+    plt.figure(figsize=(16, 8))
     plt.title(date_txt)
     plt.plot(x, y, label='AMO changes', linewidth=2, color='r', marker='o', markerfacecolor='blue', markersize=5)
     plt.xlabel('DATE')
