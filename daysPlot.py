@@ -143,7 +143,7 @@ def getPlot(cjje_lists, date_txt):
     plt.plot(x, y, label='AMO changes', linewidth=2, color='r', marker='o', markerfacecolor='blue', markersize=5)
     plt.xlabel('DATE')
     plt.ylabel('AMO')
-    plt.ylim(0, 20)
+    plt.ylim(0, 25)
 
     # 设置数字标签
     for a, b in zip(x, y):
@@ -157,18 +157,28 @@ if __name__ == '__main__':
     today = getDATE() #生成日期
     print u"\n今天是：" + today + "\n"
 
-    start_date = int(raw_input("请输入开始日期，例：20180707 > "))
-    while start_date < 20180707:
-        start_date = int(raw_input("请输入开始日期，例：20180709 > "))
-
-    end_date = int(raw_input("请输入结束日期，例：20180809 > "))
-    while end_date > int(today) or end_date < start_date:
-        end_date = int(raw_input("请输入结束日期，例：20180809 > "))
+    start_date = raw_input("请输入开始日期，例：20180707 > ")
+    if start_date == '':
+        start_date = '20180707'
+        print u"查询开始日期：" + start_date + '\n'
+    else:
+        while int(start_date) < 20180707 or int(start_date) > (int(today) - 1) :
+            start_date = raw_input("请输入开始日期，例：20180707 > ")
+            
+    end_date = raw_input("请输入结束日期，例：20180809 > ")
+    if end_date == '':
+        end_date = today
+        print u"查询结束日期：" + today
+    else:
+        while int(end_date) > int(today) or int(end_date) < int(start_date):
+            end_date = raw_input("请输入结束日期，例：20180809 > ")
     
-    print u"\n即将开始查询自 " + str(start_date) + u" 至 " + str(end_date) + u" 期间的数据...\n"
+    print u"\n即将开始查询自 " + start_date + u" 至 " + end_date + u" 期间的数据......\n"
     
     codes = getCode() #查询转债的代码
     
+    start_date = int(start_date)
+    end_date = int(end_date)
     date_list = getDate(start_date, end_date, codes) #判断查询日期是否存在数据
     #date_list = getDate(20180707, 20180719, codes) #判断查询日期是否存在数据
     
