@@ -8,6 +8,27 @@ __author__ = 'winsert@163.com'
 import sqlite3, random
 import numpy as np
 import matplotlib.pyplot as plt
+from datetime import datetime
+
+# 生成日期
+def getToday():
+    now_time = datetime.now()
+    year = str(now_time.year)
+    month = now_time.month
+    if month < 10:
+        month = '0' + str(month)
+    else:
+        month = str(month)
+
+    day = now_time.day
+    if day < 10:
+        day = '0' + str(day)
+    else:
+        day = str(day)
+
+    today = year+month+day
+    #print today
+    return today
 
 # 查询转债的代码
 def getCode():
@@ -116,15 +137,25 @@ def getScat(xy, date):
 
 
 if __name__ == '__main__':
+
+    today = getToday() #生成日期
+    print u"\n今天是：" + today + "\n"
     
-    date = int(raw_input("请输入查询日期，例：20180707 > "))
-    while date < 20180707:
-        date = int(raw_input("请输入开始日期，例：20180709 > "))
+    date = raw_input("请输入查询日期，例：20180707 > ")
+    if date == '':
+        date = today
+        print u"查询日期：" + date + '\n'
+    else:
+        while int(date) < 20180707 or int(date) > int(today):
+            date = raw_input("请输入查询日期，例：20180707 > ")
+        print u"查询日期：" + date + '\n'
+    
+    date = int(date)
     
     codes = getCode() #查询转债的代码
     d = getDate(date, codes) #判断查询日期是否存在数据
     if d != 0:
-        print u"\n即将开始查询 " + str(date) + u" 的数据...\n"
+        print u"\n即将开始查询 " + str(date) + u" 的数据......\n"
         xy_list = getCbData(date, codes) #查询转债的数据
         getScat(xy_list, date) #画散点图
     else:
