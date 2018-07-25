@@ -35,6 +35,10 @@
 
 - daysPlot.py
 画成交金额的折线图
+
+- cbPlot.py
+画指定转债的成交金额的折线图
+
 - qdao.py
 用QQBot实现主动查询的主程序, python qdao.py -q 156XXXXXX
 
