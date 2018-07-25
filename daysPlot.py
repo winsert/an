@@ -143,7 +143,7 @@ def getPlot(cjje_lists, date_txt):
     plt.plot(x, y, label='AMO changes', linewidth=2, color='r', marker='o', markerfacecolor='blue', markersize=5)
     plt.xlabel('DATE')
     plt.ylabel('AMO')
-    plt.ylim(0, 25)
+    plt.ylim(0, 35)
 
     # 设置数字标签
     for a, b in zip(x, y):
