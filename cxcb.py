@@ -62,7 +62,7 @@ def getCB():
         prefix = cc[3]
 
         #if prefix != 'QS' and prefix != 'Q':  #QS代表已强赎,Q代表忽略。
-        if prefix != 'QS':  #QS代表已强赎
+        if prefix != 'QS' and cc[7] != 0.0:  #QS代表已强赎，不重仓的不显示
 
             zzcode = cc[3]+cc[1] #前缀+转债代码
             #print zzcode
