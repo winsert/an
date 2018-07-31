@@ -119,7 +119,7 @@ def getScat(xy, date):
     plt.xlim(-20, 175)
     plt.xlabel('premium rate')
     #plt.xticks(())  # ignore xticks
-    plt.ylim(-10, 10)
+    plt.ylim(-10, 15)
     plt.ylabel('annualized rate of return')
     #plt.yticks(())  # ignore yticks
 
