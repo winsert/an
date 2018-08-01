@@ -91,8 +91,8 @@ def getDate(sdate, edate, codes):
         for date in range(sdate, edate+1):
             if str(date) in tmp_list:
                 date_list.append(str(date))
-            else:
-                print str(date) + u" 没有数据！"
+            #else:
+                #print str(date) + u" 没有数据！"
         
         #print date_list
         return date_list
@@ -133,17 +133,20 @@ def getPlot(cjje_lists, date_txt):
     print u"\n将显示 " + str(n) + u" 天的查询结果......"
     x = [] #日期
     y = [] #成交金额
-    for i in cjje_lists:
+    for i in range(n):
         #x.append(round((float(i[0]) / 10), 2))
-        x.append(float(i[0]))
-        y.append(float(i[1]))
+        x.append(i+1)
+        y.append(float(cjje_lists[i][1]))
+        #y.append(float(i[1]))
     
     plt.figure(figsize=(16, 8))
     plt.title(date_txt)
     plt.plot(x, y, label='AMO changes', linewidth=2, color='r', marker='o', markerfacecolor='blue', markersize=5)
     plt.xlabel('DATE')
+    plt.xticks(())  # ignore xticks
     plt.ylabel('AMO')
     plt.ylim(0, 35)
+    #plt.yticks(())  # ignore yticks
 
     # 设置数字标签
     for a, b in zip(x, y):
