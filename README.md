@@ -33,6 +33,12 @@
 - daysAniScat.py
 动画演示"daysScat.py"
 
+- daysBar.py
+画成交金额的柱状图
+
+- daysBP.py
+画成交金额的柱状图+平均线
+
 - daysPlot.py
 画成交金额的折线图
 
