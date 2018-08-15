@@ -147,6 +147,7 @@ def getCX(today):
 
         for cb in tmp:
             name = cb[0] #转债名称
+            #print name
             code = cb[1] #转债代码
             zgcode = cb[2] #正股代码
             prefix = cb[3] #前缀
