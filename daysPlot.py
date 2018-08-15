@@ -194,7 +194,7 @@ if __name__ == '__main__':
         cjje_list.append(cjje)
         cjje_lists.append(cjje_list)
         
-    print u'\n将显示以下数据：'
+    print u'\n将显示以下 ' + str(len(cjje_lists))+ u' 天数据：'
     print cjje_lists
     date_txt = str(start_date) + " --- " + str(end_date)
     #date_txt = "20180707  ---  20180719"
