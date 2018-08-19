@@ -19,7 +19,7 @@ def CX(alias):
     try:
         conn = sqlite3.connect('cb.db')
         curs = conn.cursor()
-        sql = "select name, jian, jia, zhong, note, position, zgj, ll, code, AVG from cb where Alias = '%s'" %cx
+        sql = "select name, jian, jia, zhong, note, position, zgj, ll, code, AVG, LPrice from cb where Alias = '%s'" %cx
         curs.execute(sql)
         tmp = curs.fetchall()
         curs.close()
@@ -35,6 +35,7 @@ def CX(alias):
         zgj = tmp[0][6] #转股价
         ll = tmp[0][7] #利率
         code = tmp[0][8] #代码
+        lprice = tmp[0][10] #代码
 
         print
         print u'名  称：', name
@@ -47,6 +48,7 @@ def CX(alias):
         print u'平均价：', avg
         print u'转股价：', zgj
         print u'利  率：', ll
+        print u'新低价：', lprice
         print
 
         tmp.append(jian)
@@ -57,10 +59,28 @@ def CX(alias):
         tmp.append(avg)
         tmp.append(zgj)
         tmp.append(ll)
+        tmp.append(lprice)
         return tmp 
 
     except Exception, e :
         print 'CX() Error:', e
+        sys.exit()
+
+#对指定转债的'名称'进行修改
+def Name(alias, name):
+    try:
+        conn = sqlite3.connect('cb.db')
+        curs = conn.cursor()
+        sql = "UPDATE cb SET Name = ? WHERE Alias = ?"
+        curs.execute(sql, (name, alias))
+        conn.commit()
+        curs.close()
+        conn.close()
+
+        print u'名称 已修改为：', name
+
+    except Exception, e:
+        print 'Name() ERROR :', e
         sys.exit()
 
 #对指定转债的'建仓价'进行修改
@@ -223,14 +243,36 @@ def LL(alias, ll):
         print 'LL() ERROR :', e
         sys.exit()
 
+#对指定转债的'新低价'进行修改
+def Lprice(alias, lprice):
+    alias = alias
+    lprice = float(lprice)
+
+    try:
+        conn = sqlite3.connect('cb.db')
+        curs = conn.cursor()
+        sql = "UPDATE cb SET LPrice = ? WHERE Alias = ?"
+        curs.execute(sql, (lprice, alias))
+        conn.commit()
+        curs.close()
+        conn.close()
+
+        print u'新低价 已修改为：', str(lprice)
+
+    except Exception, e:
+        print 'Lprice() ERROR :', e
+        sys.exit()
+
 if  __name__ == '__main__': 
 
     msg = u"""
     本程序用于修改：
+    - 名  称 Name
     - 建仓价 jian
     - 加仓价 jia
     - 重仓价 zhong
     - 说  明 note
+    - 新低价 LPrice
     - 持  仓 position
     - 平均价 avg
     - 转股价 zgj
@@ -243,8 +285,19 @@ if  __name__ == '__main__':
     yn = raw_input(u'是否要修改(y/n)？')
     if yn == 'n':
         sys.exit()
-
+    #print cx
+    '''
     print
+    print u'原 名称：', str(cx[0][0])
+    name = raw_input(u"请输入新 名称：")
+    print name
+    if name != '':
+        Name(alias, name)
+    else:
+        print u'名称 没有修改！'
+    '''
+
+    print 
     print u'原 建仓价：', str(cx[1])
     jian = raw_input(u"请输入新 建仓价：")
     if jian != '':
@@ -307,6 +360,14 @@ if  __name__ == '__main__':
         LL(alias, ll)
     else:
         print u'转股价 没有修改！'
+
+    print
+    print u'原 新低价：', str(cx[9])
+    lprice = raw_input(u"请输入新 建仓价：")
+    if lprice != '':
+        Lprice(alias, lprice)
+    else:
+        print u'新低价 没有修改！'
 
     print
     print u'全部修改结果如下：'
