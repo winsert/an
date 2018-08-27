@@ -170,7 +170,7 @@ def getBP(cjje_lists, avg_lists, date_txt):
 if __name__ == '__main__':
     
     avg_days = 5 #计算avg_days天的平均数据
-    N = 25 #查询Ｎ天前的数据
+    N = 30 #查询Ｎ天前的数据
     days = avg_days + N #查询倒数N+avg_days天的数据
 
     today = getToday() #生成今天日期
