@@ -11,8 +11,9 @@ from datetime import datetime
 
 from cxcb import getCB #查询可转债,可交换债是否满足三线的模块
 from cxhp import getHP #高价折扣模块
-from cxwh import getWH #查询外汇模块
-from cxjj import getJJ #查询基金模块
+#from cxwh import getWH #查询外汇模块
+#from cxjj import getJJ #查询基金模块
+from cx_stock import getStock #查询股票模块
 from cxqs import getQS #强赎模块
 from cxindex import getIndex #指数模块
 
@@ -28,6 +29,7 @@ if __name__ == '__main__':
     newPriceMsg =  u"没有可转债满足 买入条件。"
     HPriceMsg =  u"没有可转债满足 高价折扣法 。"
     WHmsg = u"外汇一切正常 !"
+    STmsg = u"Stock一切正常 !"
     JJmsg = u"基金一切正常 !"
 
     account = itchat.get_friends()
@@ -95,6 +97,16 @@ if __name__ == '__main__':
                 #print
                 #itchat.send(hpMsg, 'filehelper')
                 itchat.send(hpMsg, toUserName = userName)
+
+        # 查询stock价格是否低(高)于预设值
+        STlist = getStock()
+        if len(STlist) == 0: #没有满足条件stock
+            print STmsg
+            print
+        else:
+            for stMsg in STlist: #有满足条件的Stock
+                print stMsg
+                itchat.send(stMsg, toUserName = userName)
 
         # 查询外汇价格是否低于预设值
         #WHlist = getWH()
