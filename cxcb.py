@@ -71,7 +71,7 @@ def getCB():
             jian = float(cc[5]) #建仓价
             jia = float(cc[6])  #加仓价
             zhong = float(cc[7]) #重仓价
-            LPrice = float(cc[9])-0.5 #最低价-0.5
+            LPrice = float(cc[9])-1.0 #最低价-0.5
             zz = float(getZZ(zzcode)) #查询转债价格
 
             if zz <= jian and zz < LPrice and zz > jia and position < 600: #满足建仓条件
