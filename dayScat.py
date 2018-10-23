@@ -115,7 +115,7 @@ def getScat(xy, date):
     plt.scatter(X, Y, s=10, c='blue', alpha=1)
 
     plt.title(date)
-    plt.xlim(-20, 175)
+    plt.xlim(-20, 250)
     plt.xlabel('premium rate')
     #plt.xticks(())  # ignore xticks
     plt.ylim(-10, 15)
