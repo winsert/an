@@ -62,6 +62,16 @@ if __name__ == '__main__':
             print 
             itchat.send(restStartMsg, toUserName = userName)
 
+            index = {u'上证50':'sh000016', u'沪深300':'sz399300', u'中证500':'sh000905', u'创业板':'sz399006', u'B股':'sh000003', u'国债':'sh000012'} #要查询的指数代码
+    
+            for k in index.keys():
+                value = index.get(k)
+                index_zz = getIndex(value)
+                index_msg = k+' : '+str(index_zz)
+                print index_msg
+                #itchat.send(index_msg, 'filehelper')
+                itchat.send(index_msg, toUserName = userName)
+
             time.sleep(5500)
 
             print time.asctime(time.localtime(time.time())) #显示查询时间
