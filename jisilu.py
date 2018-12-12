@@ -126,30 +126,30 @@ def record(url):
     record.append(tmp_list[14][0]) #到期日
     record.append(tmp_list[22][0]) #赎回价
 
-    tmp_list[40] #转股价下调
-    for i in tmp_list[40]:
+    tmp_list[44] #转股价下调
+    for i in tmp_list[44]:
         zgjxt = zgjxt + i
     record.append(unicode(zgjxt))
         
-    tmp_list[42] #强制赎回
-    for i in tmp_list[42]:
+    tmp_list[46] #强制赎回
+    for i in tmp_list[46]:
         qzsh = qzsh + i
     record.append(unicode(qzsh))
 
-    tmp_list[44] #回售
-    for i in tmp_list[44]:
+    tmp_list[48] #回售
+    for i in tmp_list[48]:
         hs = hs + i
     record.append(unicode(hs))
 
-    tmp_list[46] #利率
-    print tmp_list[46]
-    if len(tmp_list[46]) == 1:
+    tmp_list[50] #利率
+    print tmp_list[50]
+    if len(tmp_list[50]) == 1:
         ll = '1.0,1.0,1.0,1.0,1.0'
     else:
-        for i in range(1,len(tmp_list[46])):
+        for i in range(1,len(tmp_list[50])):
             try:
-                #f  = float(tmp_list[46][i][:3])
-                ll = ll + tmp_list[46][i][:3] + ','
+                #f  = float(tmp_list[50][i][:3])
+                ll = ll + tmp_list[50][i][:3] + ','
             except Exception, e:
                 continue
         ll = ll[:-1]
