@@ -34,8 +34,8 @@ if __name__ == '__main__':
 
     account = itchat.get_friends()
     for user in account:
-        #if user['NickName'] == 'Andy':
-        if user['NickName'] == 'andy130':
+        if user['NickName'] == 'Andy':
+        #if user['NickName'] == 'andy130':
             userName = user['UserName']
 
     now_time = datetime.now()
