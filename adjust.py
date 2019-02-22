@@ -71,6 +71,7 @@ def Name(alias, name):
     try:
         conn = sqlite3.connect('cb.db')
         curs = conn.cursor()
+        conn.text_factory = str #解决字符问题
         sql = "UPDATE cb SET Name = ? WHERE Alias = ?"
         curs.execute(sql, (name, alias))
         conn.commit()
@@ -286,16 +287,16 @@ if  __name__ == '__main__':
     if yn == 'n':
         sys.exit()
     #print cx
-    '''
+    
     print
     print u'原 名称：', str(cx[0][0])
-    name = raw_input(u"请输入新 名称：")
+    name = str(raw_input(u"请输入新 名称："))
     print name
     if name != '':
         Name(alias, name)
     else:
         print u'名称 没有修改！'
-    '''
+    
 
     print 
     print u'原 建仓价：', str(cx[1])
