@@ -9,6 +9,9 @@
 - ann.py
 用微信实现：可长期执行的被动查询的主程序
 
+- ans.py
+用邮件实现：可长期执行的被动查询的主程序
+
 - qan.py
 用QQBot实现：每天执行一次的被动查询的主程序, python qan.py -q 156XXXXXX
 
@@ -41,6 +44,9 @@
 
 - daysPlot.py
 画成交金额的折线图
+
+- daysRate.py
+画牛熊转化图
 
 - cbPlot.py
 画指定转债的成交金额的折线图
@@ -116,6 +122,9 @@ SQLite3数据库:cb是可转债表，eb是可交换债表
 
 - record.py
 用于查询转债的每笔成交记录
+
+- sendmail.py
+用于发送邮件
 
 - xxx.py
 临时修改文件
