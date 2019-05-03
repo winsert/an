@@ -20,7 +20,7 @@ from sendmail import sendMail #邮件发送模块
 
 if __name__ == '__main__':
 
-    startMsg = u'不挑戏，不逃戏，不入戏，不调戏'
+    startMsg = u'准备开始！'
     restStartMsg = 'Have a good Lunch !'
     restEndMsg = 'Good Afternoon !'
     endMsg =  "I will come back !"
