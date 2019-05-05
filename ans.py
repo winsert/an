@@ -37,10 +37,6 @@ if __name__ == '__main__':
     
         if datetime.now() > start_time and datetime.now() < end_time:
 
-            print startMsg
-            print
-            sendMail(startMsg)
-
             #print datetime.now()
             print time.asctime(time.localtime(time.time())) #显示查询时间
 
