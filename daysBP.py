@@ -72,8 +72,6 @@ def getCode():
                 code_list.append(code[0])
         
         #print code_list
-        code_list.remove('123004')
-        #print code_list
         return code_list
                
     except Exception, e:
@@ -148,7 +146,8 @@ def getBP(cjje_lists, avg_lists, date_txt):
         y2.append(float(avg_lists[i][1]))
     
     plt.figure(figsize=(16, 8))
-    plt.title(date_txt)
+    #plt.title(date_txt)
+    plt.title(u'转债市场日成交总金额统计')
     plt.bar(x, y1)
     plt.plot(x, y2, linewidth=3, color='r')
     #plt.plot(x, y2, linewidth=5, color='r', marker='o', markerfacecolor='blue', markersize=5)
@@ -157,7 +156,7 @@ def getBP(cjje_lists, avg_lists, date_txt):
     plt.xlabel('DATE')
     plt.xticks(())  # ignore xticks
     plt.ylabel('AMO')
-    plt.ylim(0, 100)
+    plt.ylim(0, 210)
     #plt.yticks(())  # ignore yticks
 
     # 设置数字标签
