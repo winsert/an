@@ -6,6 +6,7 @@
 __author__ = 'winsert@163.com'
 
 import time
+from sys import exit
 from datetime import datetime
 
 from cxcb import getCB #查询可转债,可交换债是否满足三线的模块
@@ -33,7 +34,7 @@ if __name__ == '__main__':
     print
     sendMail(sysMsg)
 
-    while 1: 
+    while datetime.now() < end_time: 
     
         if datetime.now() > start_time and datetime.now() < end_time:
 
@@ -61,3 +62,4 @@ if __name__ == '__main__':
                     sendMail(hpMsg)
         
         time.sleep(60)  # 延时查询的秒数,300即延时5分钟查询一次。
+    exit()
