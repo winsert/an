@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-# 自动获取可转债、可交换债的最新价进行"三线"和"高价折扣法"分析
+# 自动获取可转债的最新价进行"三线"和"高价折扣法"分析，并用微信发送通知
 
 __author__ = 'winsert@163.com'
 
@@ -9,13 +9,13 @@ import itchat, time
 from sys import exit
 from datetime import datetime
 
-from cxcb import getCB #查询可转债,可交换债是否满足三线的模块
-from cxhp import getHP #高价折扣模块
+from cbond.cxcb import getCB #查询可转债,可交换债是否满足三线的模块
+from cbond.cxhp import getHP #高价折扣模块
 #from cxwh import getWH #查询外汇模块
 #from cxjj import getJJ #查询基金模块
 #from cx_stock import getStock #查询股票模块
-from cxqs import getQS #强赎模块
-from cxindex import getIndex #指数模块
+from cbond.cxqs import getQS #强赎模块
+from cbond.cxindex import getIndex #指数模块
 
 if __name__ == '__main__':
     
@@ -34,6 +34,7 @@ if __name__ == '__main__':
 
     account = itchat.get_friends()
     for user in account:
+        #if user['NickName'] == 'ken':
         if user['NickName'] == 'Andy':
         #if user['NickName'] == 'andy130':
             userName = user['UserName']
@@ -63,7 +64,16 @@ if __name__ == '__main__':
             print 
             itchat.send(restStartMsg, toUserName = userName)
 
-            index = {u'上证50':'sh000016', u'沪深300':'sz399300', u'中证500':'sh000905', u'创业板':'sz399006', u'B股':'sh000003', u'证券公司':'sz399975'} #要查询的指数代码
+            index = {
+                u'50ETF':'sh510050',
+                u'300ETF':'sh510300',
+                u'500ETF':'sh510500',
+                u'创业板ETF':'sz159915',
+                u'证券ETF':'sh512880',
+                u'红利ETF':'sh510880',
+                u'H股ETF':'sh510900',
+                u'深证成指':'sz399001',
+                } #要查询的指数代码
     
             for k in index.keys():
                 value = index.get(k)
@@ -82,7 +92,30 @@ if __name__ == '__main__':
 
         #print datetime.now()
         print time.asctime(time.localtime(time.time())) #显示查询时间
-
+        '''
+        #指数分析：
+        index = {
+                u'50ETF':'sh510050',
+                u'300ETF':'sh510300',
+                u'500ETF':'sh510500',
+                u'创业板ETF':'sz159915',
+                u'证券ETF':'sh512880',
+                u'科技ETF':'sh515000',
+                u'红利ETF':'sh510880',
+                u'半导体ETF':'sh512760',
+                u'中概互联':'sh513050',
+                u'H股ETF':'sh510900',
+                u'深证成指':'sz399001',
+                } #要查询的指数代码
+        
+        for k in index.keys():
+            value = index.get(k)
+            index_zz = getIndex(value)
+            if index_zz < -1.5:
+                index_msg = k+' : '+str(index_zz)
+                print index_msg
+                itchat.send(index_msg, toUserName = userName)
+        '''
         # 三线分析：
         msglist = getCB() #查询是否有CB满足三线买入条件
         if len(msglist) == 0: #没有满足条件的CB
@@ -139,10 +172,10 @@ if __name__ == '__main__':
                 #print jjMsg
                 #itchat.send(jjMsg, toUserName = userName)
 
-        time.sleep(60)  # 延时查询的秒数,300即延时5分钟查询一次。
+        time.sleep(120)  # 延时查询的秒数,300即延时5分钟查询一次。
 
     # 查询指数收盘的涨跌情况
-    index = {u'上证50':'sh000016', u'沪深300':'sz399300', u'中证500':'sh000905', u'创业板':'sz399006', u'B股':'sh000003', u'证券公司':'sz399975'} #要查询的指数代码
+    index = {u'50ETF':'sh510050', u'300ETF':'sh510300', u'500ETF':'sh510500', u'创业板':'sz159915', u'B股':'sh000003', u'证券ETF':'sh512880', u'科技ETF':'sh515000', u'红利ETF':'sh510880'} #要查询的指数代码
     
     for k in index.keys():
         value = index.get(k)
