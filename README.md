@@ -1,130 +1,126 @@
-# 实时查询可转债、外汇等价格信息并进行分析的应用
+# myweb
 
-- adjust.py
-用于修改jian, jia, zhong, note, position数据
+run.py      #web页面的主程序
 
-- an.py
-用微信实现：每天执行一次的被动查询的主程序
+adjust.py   #用于修改转债信息:表cb0
+adjust1.py  #用于修改转债信息:表cb
 
-- ann.py
-用微信实现：可长期执行的被动查询的主程序
+an.py       #用微信发送三线、高价折扣通知
 
-- ans.py
-用邮件实现：可长期执行的被动查询的主程序
+daysT.py    #用于向dd数据库的cbt表中增加数据
+dayScat.py  #用于画转债溢价率的散点图
+daysBP.py   #从dd.db提取数据，计算成交金额，用于画转债成交量的直方图
+daysCJJE.py #从cbt表提取数据，计算成交金额，用于画转债成交量的直方图
+daysRate.py #从dd.db提取数据，用于画牛熊转换指标图
+daysR.py    #从cbt表中提取数据，用于画牛熊转换指标图
 
-- qan.py
-用QQBot实现：每天执行一次的被动查询的主程序, python qan.py -q 156XXXXXX
+dd.py       #用于记录转债日成交信息
 
-- qann.py
-用QQBot实现：可长期执行的被动查询的主程序, python qann.py -q 156XXXXXX
+dqjz.py     #用于计算转债的到期价值和年化
 
-- dao.py
-用微信itchat实现主动查询的主程序
+exchange.py #用于记录转债的交易数据
 
-- dd.py
-记录正股，转债每日交易数据的程序
+jisilu.py   #用于从集思录下载转债信息
 
-- dd.db
-记录正股，转债每日交易数据的数据库
+cb.db       #记录转债信息的数据库
+dd.db       #记录转债日成交信息的数据库
 
-- dayScat.py
-画某一天的溢价率，年化收益率的散点图
+SendMail.py #用邮件发送三线、高价折扣通知
 
-- daysScat.py
-画多天的溢价率，年化收益率的散点图
+APP/
+    __init__.py     #初始化文件
 
-- daysAniScat.py
-动画演示"daysScat.py"
+    views.py        #FLASK视图模块
 
-- daysBar.py
-画成交金额的柱状图
+    cx_cpu.py       #用于查询cpu温度
 
-- daysBP.py
-画成交金额的柱状图+平均线
+    cx_cx.py        #用于查询可转债三线数据
 
-- daysPlot.py
-画成交金额的折线图
+    cxcx.py         #查询指定转债，便于查错使用
 
-- daysRate.py
-画牛熊转化图
+    cx_ex.py        #用于查询交换债本线数据
 
-- cbPlot.py
-画指定转债的成交金额的折线图
+    cx_index.py     #用于查询证券指数
 
-- cbYNPlot.py
-画指定转债溢价率，收到期年化收益率的折线图
+    cx_jj.py        #用于查询基金数据
 
-- qdao.py
-用QQBot实现主动查询的主程序, python qdao.py -q 156XXXXXX
+    cx_nhg.py       #用于查询逆回购数据
 
-- cb.db
-SQLite3数据库:cb是可转债表，eb是可交换债表
+    cx_pm.py         #用于查询PM数据
 
-- ann.py
-用微信实现：可长期执行的被动查询的主程序
+    cx_sp.py        #用于查询商品数据
 
-- cx_cb.py
-主动查询可转债,交换债是否满足三线条件的模块
+    cx_tk.py        #用于查询可转债、交换债条款
 
-- cxcb.py
-被动查询可转债,交换债是否满足三线条件的模块
+    cx_weather.py   #用于查询天气实况
 
-- cx_cpu.py
-主动查询CPU温度的模块
+    cx_wh.py        #用于查询外汇
 
-- cx_cx.py
-主动查询可转债信息的模块
+    mcx_cx.py       #用于mobile.html页面显示转债三线数据
 
-- cx_ex.py
-主动查询可交换债信息的模块
+    mcx_ex.py       #用于mobile.html页面显示交换债三线数据
 
-- cx_stock.py
-查询指定股票的价格
+    qcx_cx.py       #用于查询全部可转债数据
 
-- cxhp.py
-被动查询可转债是否满足高价折扣法的模块
+    qcx_ex.py       #用于查询全部交换债数据
 
-- cx_index.py
-主动查询证券指数的模块
+    web_3line.py    #支持APP(CBond),用于查询满足三线条件的转债
 
-- cxindex.py
-被动查询证券指数的模块
+    web_arrange.py  #支持APP(CBond),用于更新转债每日最高最低价
 
-- cx_jrtq.py
-主动查询今日天气信息的模块
+    web_cback.py    #支持APP(CBond5.x),用于向公网数据库提供数据同步服务
+    web_cback6.py   #支持APP(CBond6.x),用于向公网数据库提供数据同步服务
 
-- cxjj.py
-被动查询基金的模块
+    web_cb          #支持APP(CBond),用于查询可转债信息
 
-- cx_pm.py
-主动查询PM等数据的模块
+    web_hp.py       #支持APP(CBond),用于查询满足高价折扣的转债
 
-- cxqs.py
-被动计算转债的强赎天数
+	web_weather.py	#用于APP查询济南市多地实时天气信息
 
-- cx_tqsk
-主动查询天气实况信息的模块
+    wxcx.py         #用于查询转债信息
 
-- cx_wh.py
-主动查询外汇的模块
+    wxex.py         #用于查询交债信息
 
-- cxwh.py
-被动查询外汇的模块
+	wxdqjz.py		#用于查询“最新价<到期价值”的转债
+    wxdqjz0.py		#用于查询“最新价<到期价值”的转债 zhonn=0
 
-- cxzg.py
-被动查询可转债正股的模块
+    jian_4.py		#用于过滤“当前价>建仓价 and <＝建仓价＋4.0元”的可转债
 
-- jisilu.py
-用于从jisilu.cn上爬取新转债的数据，并加入到数据库中。
+    zb.py           #用于转债值占比分析
 
-- exchange.py
-用于记录转债的每笔成交记录
+static/             #用于保存静态文件
 
-- record.py
-用于查询转债的每笔成交记录
+common              #用于保存通用功能模块
 
-- sendmail.py
-用于发送邮件
+    price.py        #用于从http://hq.sinajs.cn/list=获取最新成交价格
 
-- xxx.py
-临时修改文件
+    sendmail.py     #邮件发送模块
+
+cond/               #用于保存转债相关的模块
+
+    cxcb.py         #三线查询模块
+
+    cxhp.py         #高价折扣查询模块
+
+    cxindex.py      #指数查询模块
+
+    cxqs.py         #强赎查询模块
+
+
+templates/
+    index.html
+
+    base.html
+
+    cb.html         #显示全部可转债、交换债数据的页面
+
+    mobile.html     #移动端显示三线数据
+
+    tk.html         #显示全部可转债、交换债条款查询结果的页面
+
+    weather.html    #显示天气实况信息
+
+	dqjz.html		#显示“最新价<到期价值”的转债
+    dqjz0.html		#显示“最新价<到期价值”的转债,zhong=0
+
+    zb.html         #显示转债市值占比分析的页面
