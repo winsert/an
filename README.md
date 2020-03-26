@@ -106,6 +106,8 @@ cond/               #用于保存转债相关的模块
 
     cxqs.py         #强赎查询模块
 
+    readcb.py       #将表转换为列表的模块
+
 
 templates/
     index.html
