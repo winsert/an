@@ -6,7 +6,7 @@
 __author__ = 'winsert@163.com'
 
 #import itchat, time
-import time
+import itchat, time
 from sys import exit
 from datetime import datetime
 
