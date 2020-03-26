@@ -2,10 +2,10 @@
 # -*- coding: UTF-8 -*-
 
 # 自动获取可转债、可交换债的最新价是否满足高价折扣法的模块
-
 __author__ = 'winsert@163.com'
 
-import sqlite3, urllib2
+import urllib2
+from readcb import readCB3 #读出 code=3(持仓) 可转债,可交换债的所有信息
 
 # 用于解析URL页面
 def bsObjForm(url):
@@ -47,84 +47,46 @@ def getZG(zgcode, zz, zgj):
         print "getZG() is error !"
         return zdf, yjl
 
-#对cb.db中HPrice的值进行修改
-def getSQLite(code, newHP):
-    cc = code
-    hp = float(newHP)
-
-    try:
-        conn = sqlite3.connect('cb.db')
-        curs = conn.cursor()
-        sql = "UPDATE cb SET HPrice = %r WHERE Code = %s" % (hp, cc) 
-        curs.execute(sql)
-        conn.commit()
-        curs.close()
-        conn.close()
-
-    except Exception, e1:
-        print 'getSQLite ERROR :',e1
-
 #从cb.db数据库中提取可转债数据进行"高价折扣法"分析
-def getHP():
-    hpMsg = []
-    hpmsg = ''
+def getHP(cblist):
     
     try:
-        conn = sqlite3.connect('cb.db')
-        curs = conn.cursor()
-        sql = "select name, Code, Prefix, position, HPrice, zgcode, zgj from cb" 
-        curs.execute(sql)
-        tmp = curs.fetchall()
-        curs.close()
-        conn.close()
+        name = cblist[3] #转债名称
+        code = cblist[5] #转债代码
+        zzcode = cblist[7]+cblist[5] #前缀+转债代码
+        zgcode = cblist[7]+cblist[6] #前缀+正股代码
+        HPrice = float(cblist[10]) #原最高价
+        zgj = float(cblist[17]) #转股价
+        zz = float(getZZ(zzcode)) #查询转债价格
 
-        for cc in tmp:
-            name = cc[0] #转债名称
-            code = cc[1] #转债代码
-            zzcode = cc[2]+cc[1] #前缀+转债代码
-            position = float(cc[3]) #仓位
-            hp = float(cc[4]) #原最高价
-            zgcode = cc[2]+cc[5] #前缀+正股代码
-            zgj = cc[6] #转股价
-
-            if position > 0:
-                zz = float(getZZ(zzcode)) #查询转债价格
-                #print name+u' 原最高价：'+str(hp)+u'  当前价：'+str(zz)+'\n'
-
-                #if zz > hp + 1.0: #比原最高价高1.0元
-                if zz > hp * 1.01: #比原最高价高1%
-                    getSQLite(code, zz)
-                    zdf, yjl = getZG(zgcode, zz, zgj)
-                    #hpmsg = cc[0]+u': '+str(position)+u'张'+u'\n最新价:'+str(zz)+u' >前高价:'+str(hp)
-                    #hpmsg = cc[0]+u': '+str(zz)+u' >前高价:'+str(hp)
-                    hpmsg = cc[0]+u':'+str(zz)+u'>前高价'+str(hp)+u'\n正股:'+str(zdf)+'%'+u'，溢价率'+str(yjl)+'%'
-                    hpMsg.append(hpmsg)
-
-                elif hp > 130.0 and zz < 130.0:
-                    getSQLite(code, 130.00)
-                    #hpmsg = cc[0]+u': '+str(position)+u'张'+u'\n最新价:'+str(zz)+u',< 130元。'
-                    hpmsg = cc[0]+u':'+str(zz)+u' < 130元！'
-                    hpMsg.append(hpmsg)
-
-                elif hp >= 130.0 and zz <= (hp-9) and zz > 130.0:
-                    getSQLite(code, zz)
-                    #hpmsg = cc[0]+u': '+str(position)+u'张'+u'\n最新价:'+str(zz)+u'\n自最高价下跌超过9元。'
-                    hpmsg = cc[0]+u':'+str(zz)+u'，自最高价下跌超过9元。'
-                    hpMsg.append(hpmsg)
+        #if zz > HPrice + 1.0: #比原最高价高1.0元
+        if zz > HPrice * 1.01: #比原最高价高1%    
+            zdf, yjl = getZG(zgcode, zz, zgj)
+            msg = name+u':'+str(zz)+u'>前高价'+str(HPrice)+u'\n正股:'+str(zdf)+'%'+u'，溢价率'+str(yjl)+'%'
+            newHPrice = zz #新最高价
+        elif HPrice > 130.0 and zz < 130.0: #转债价格跌破130.00
+            msg = name+u':'+str(zz)+u' < 130元！'
+            newHPrice = 130.00 #将最高价重置为130.00
+        elif HPrice >= 130.0 and zz <= (HPrice-9) and zz > 130.0:
+            msg = name+u':'+str(zz)+u'，自最高价下跌超过9元。'
+            newHPrice = zz #新最高价
+        else:
+            msg = 'ok'
+            newHPrice = HPrice
 
     except Exception,e2:
         print 'getHP ERROR :',e2
 
-    #print hpMsg
-    return hpMsg
+    if msg != 'ok':
+        print msg
+        print
+    else:
+        print name+u'最高价'+str(newHPrice)+u',不变。\n'
+
+    return msg, newHPrice
 
 if __name__ == '__main__':
     
-    HPlist = getHP()
-    if len(HPlist) == 0:
-        print u'一切正常！'
-        print
-    else:
-        for hpMsg in HPlist:
-            print hpMsg
-            print
+    list3 = readCB3()
+    for cblist in list3:
+        msg, newHPrice = getHP(cblist)

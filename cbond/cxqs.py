@@ -2,11 +2,12 @@
 # -*- coding: UTF-8 -*-
 
 # 本程序用于计算转债的强赎天数
-
 __author__ = 'winsert@163.com'
 
 import sqlite3, urllib2
 from datetime import datetime
+
+from readcb import readCB #读出 code!= 0 的可转债,可交换债的所有信息
 
 # 用于解析URL页面
 def bsObjForm(url):
@@ -28,7 +29,6 @@ def getZG(zgCode):
         return zg_price
     except:
         zg_price = 0.0
-        zg_zdf = 0.0
         return zg_price
 
 # 用于查询转债的价格
@@ -37,63 +37,117 @@ def getZZ(zzCode):
     url = "http://hq.sinajs.cn/list="+key #生成用于查询的URL
     resp = bsObjForm(url)
     tmp_list = resp.split(',')
-    zz_price = float(tmp_list[3]) #获取正股实时价格
-    return zz_price
+    zz_price = float(tmp_list[3]) #获取转债收盘价
+    zz_hprice = float(tmp_list[4]) #获取转债当日最高价
+    zz_lprice = float(tmp_list[5]) #获取转债当日最低价
+    return zz_price, zz_hprice, zz_lprice
 
-# 主程序
-def getQS():
-    msglist = []
+#对cb.db中HPrice(最高价)的值进行修改
+def modiHPrice(zzcode, HPrice):
     try:
         conn = sqlite3.connect('cb.db')
-        curs = conn.execute("select Code, zgcode, Prefix, zgqsr, zgj, qs, qss, name, position from cb")
-        for row in curs:
-            code = row[0]
-            zzcode = row[2]+row[0] #前缀+转债代友
-            zgcode = row[2]+row[1] #前缀+正股代码
-            prefix = row[2] #前缀
-            zgqsr = row[3] #转股起始日
-            zgj = float(row[4]) #转股价
-            qs = row[5] #已强赎天数
-            qss = row[6] #30天记数
-            name = row[7]
-            position = row[8]
+        curs = conn.cursor()
+        sql = "UPDATE cb SET HPrice = %r WHERE zzcode = %s" % (HPrice, zzcode) 
+        curs.execute(sql)
+        conn.commit()
+        curs.close()
+        conn.close()
+    except Exception, e:
+        print 'modiHPrice ERROR :', e
+
+#对cb.db中LPrice(最低价)的值进行修改
+def modiLPrice(zzcode, LPrice):
+    try:
+        conn = sqlite3.connect('cb.db')
+        curs = conn.cursor()
+        sql = "UPDATE cb SET LPrice = %r WHERE zzcode = %s" % (LPrice, zzcode) 
+        curs.execute(sql)
+        conn.commit()
+        curs.close()
+        conn.close()
+    except Exception, e:
+        print 'modiLPrice ERROR :', e
+
+#对cb.db中qs, qss的值进行修改
+def qsDay(nqs, nqss, code):
+    try:
+        conn = sqlite3.connect('cb.db')
+        curs = conn.cursor()
+        sql = "UPDATE cb SET qs = %r, qss = %r where zzcode = %s" % (nqs, nqss, code)
+        curs.execute(sql)
+        conn.commit()
+        curs.close()
+        conn.close()
+    except Exception, e:
+        print 'qsDay ERROR :', e
+
+#对cb.db中qss的值进行修改
+def qssDay(nqss, code):
+    try:
+        conn = sqlite3.connect('cb.db')
+        curs = conn.cursor()
+        sql = "UPDATE cb SET qss = %r where zzcode = %s" % (nqss, code)
+        curs.execute(sql)
+        conn.commit()
+        curs.close()
+        conn.close()
+    except Exception, e:
+        print 'qssDay ERROR :', e
+
+# 强赎分析,更新最高价，最低价
+def getQS(listCB):
+    msglist = []
+    try:
+        for cblist in listCB:
+            name = cblist[3] #转债名称
+            code = cblist[5] #转债代码
+            zzcode = cblist[7]+cblist[5] #前缀+转债代码
+            zgcode = cblist[7]+cblist[6] #前缀+正股代码
+            hprice = float(cblist[10]) #原最高价
+            lprice = float(cblist[11]) #原最低价
+            zgqsr = cblist[16] #转股起始日
+            zgj = float(cblist[17]) #转股价
+            qs = cblist[25] #已强赎天数
+            qss = cblist[26] #30天记数
+
+            zz, zz_hprice, zz_lprice = getZZ(zzcode) #查询转债收盘价,当日最高价,当日最低价
+
+            if zz_hprice > hprice: #更新最高价
+                #print name, 'zz_hprice' , zz_hprice, hprice
+                modiHPrice(code, zz_hprice)
+                msg = name+u'最高价已更新为:'+str(zz_hprice)+u'元。'
+                msglist.append(msg)
+                
+            if zz_lprice < lprice: #更新最低价
+                #print name, 'zz_lprice', zz_lprice, lprice
+                modiLPrice(code, zz_lprice)
+                msg = name+u'最低价已更新为:'+str(zz_lprice)+u'元。'
+                msglist.append(msg)
 
             y = zgqsr.split('-') #转换为日期格式
             d = datetime(int(y[0]), int(y[1]), int(y[2]), 0, 0)
 
-            if datetime.now() >= d and prefix != 'QS' and position > 0:
+            if datetime.now() >= d:
                 zg = getZG(zgcode) #查询正股价格
-                zz = getZZ(zzcode) #查询转债价格
-
+                
                 if zg > 0 and zz > 0:
                     qsl = round((zg/zgj), 2) #计算强赎率
 
                     if qsl > 1.3 and qs < 15 and qss >= 1:
                         nqs = qs + 1
                         nqss = qss -1
-                        conn.execute("UPDATE cb SET qs = %r, qss = %r where Code = %s" % (nqs, nqss, code))
+                        qsDay(nqs, nqss, code)
                         msg = name+u'\n已强赎'+str(nqs)+u'天,剩余天数:'+str(nqss)+u'天。'
                         msglist.append(msg)
                     elif qsl > 1.3 and qs >= 15 and qss >= 0:
-                        #conn.execute("UPDATE cb SET prefix = 'QS' where Code = %s" % code)
                         msg = name+u' 已完成强赎!!!'
                         msglist.append(msg)
                     elif qsl < 1.3 and qs >= 1 and qss >= 1:
                         nqss = qss -1
-                        conn.execute("UPDATE cb SET qss = %r where Code = %s" % (nqss, code))
+                        qssDay(nqss, code)
                         msg = name+u'\n已强赎'+str(qs)+u'天,剩余天数:'+str(nqss)+u'天。'
                         msglist.append(msg)
 
-                if qss == 0 :
-                    nqs = 0
-                    nqss = 30
-                    conn.execute("UPDATE cb SET qs = %r, qss = %r where Code = %s" % (nqs, nqss, code))
-                    msg = name+u' 强赎失败'
-                    msglist.append(msg)
-
-        conn.commit()
-        curs.close()
-        conn.close()
         return msglist
 
     except Exception, e:
@@ -104,6 +158,9 @@ def getQS():
 
 if __name__ == '__main__':
     
-    msglist = getQS()
+    # code!= 0 的转债列表(非强赎转债)
+    listCB = readCB()
+
+    msglist = getQS(listCB)
     for msg in msglist:
         print msg

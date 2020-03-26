@@ -11,19 +11,26 @@ __author__ = 'winsert@163.com'
 
 import sqlite3
 
-# 读出所有可转债、可交换债的所有信息
+# 读出 code>0 所有可转债、可交换债的所有信息
 def readCB():
+    cblists = []
     conn = sqlite3.connect('cb.db')
     curs = conn.cursor()
-    sql = "select * from cb" 
+    sql = "select * from cb where code > 0" 
     curs.execute(sql)
     tmp = curs.fetchall()
     curs.close()
     conn.close()
-    return tmp
+
+    for tlist in tmp:
+        cblist = list(tlist) #将元组tuple转换成list
+        cblists.append(cblist)
+        
+    return cblists
 
 # 读出 code=0 的可转债、可交换债的所有信息
 def readCB0():
+    cblists = []
     conn = sqlite3.connect('cb.db')
     curs = conn.cursor()
     sql = "select * from cb where code=0" 
@@ -31,10 +38,16 @@ def readCB0():
     tmp = curs.fetchall()
     curs.close()
     conn.close()
-    return tmp
+
+    for tlist in tmp:
+        cblist = list(tlist) #将元组tuple转换成list
+        cblists.append(cblist)
+        
+    return cblists
 
 # 读出 code=1 的可转债、可交换债的所有信息
 def readCB1():
+    cblists = []
     conn = sqlite3.connect('cb.db')
     curs = conn.cursor()
     sql = "select * from cb where code=1" 
@@ -42,10 +55,16 @@ def readCB1():
     tmp = curs.fetchall()
     curs.close()
     conn.close()
-    return tmp
+    
+    for tlist in tmp:
+        cblist = list(tlist) #将元组tuple转换成list
+        cblists.append(cblist)
+        
+    return cblists
 
 # 读出 code=2 的可转债、可交换债的所有信息
 def readCB2():
+    cblists = []
     conn = sqlite3.connect('cb.db')
     curs = conn.cursor()
     sql = "select * from cb where code=2" 
@@ -53,10 +72,16 @@ def readCB2():
     tmp = curs.fetchall()
     curs.close()
     conn.close()
-    return tmp
+
+    for tlist in tmp:
+        cblist = list(tlist) #将元组tuple转换成list
+        cblists.append(cblist)
+        
+    return cblists
 
 # 读出 code=3 的可转债、可交换债的所有信息
 def readCB3():
+    cblists = []
     conn = sqlite3.connect('cb.db')
     curs = conn.cursor()
     sql = "select * from cb where code=3" 
@@ -64,7 +89,12 @@ def readCB3():
     tmp = curs.fetchall()
     curs.close()
     conn.close()
-    return tmp
+
+    for tlist in tmp:
+        cblist = list(tlist) #将元组tuple转换成list
+        cblists.append(cblist)
+
+    return cblists
 
 if __name__ == '__main__':
 
@@ -86,5 +116,10 @@ if __name__ == '__main__':
     list3 = readCB3()
     print "\n\ncode = 3 共有：" + str(len(list3))
     for i in list3:
+        print i[3],
+
+    listNo0 = readCB()
+    print "\n\ncode > 0 共有：" + str(len(listNo0))
+    for i in listNo0:
         print i[3],
     print "\n"
