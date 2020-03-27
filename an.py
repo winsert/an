@@ -11,7 +11,6 @@ from sys import exit
 from datetime import datetime
 
 from cbond.readcb import readCB #读出 code!= 0 的可转债,可交换债的所有信息
-from cbond.readcb import readCB3 #读出 code=3(持仓) 可转债,可交换债的所有信息
 from cbond.cxcb import getCB #进行高价折扣和三线分析的模块
 from cbond.cxqs import getQS #强赎模块
 from cbond.cxindex import getIndex #指数模块
@@ -19,7 +18,7 @@ from cbond.cxindex import getIndex #指数模块
 if __name__ == '__main__':
     
     # 持仓的转债列表
-    list3 = readCB3()
+    list3 = readCB(3)
 
     #要查询的指数代码
     index = {
@@ -114,6 +113,7 @@ if __name__ == '__main__':
             i = i +1
 
         time.sleep(100)  # 延时查询的秒数,120即延时2分钟查询一次。
+        print time.asctime(time.localtime(time.time())) #显示查询时间
 
     # 查询指数收盘的涨跌情况
     for k in index.keys():
@@ -123,8 +123,8 @@ if __name__ == '__main__':
         print index_msg
         itchat.send(index_msg, toUserName = userName)
     
-    # code!= 0 的转债列表(非强赎转债)
-    listCB = readCB()
+    # code!= -1 的转债列表(非强赎转债)
+    listCB = readCB(-1)
     #计算转债的强赎天数，更新最高价和最低价：
     qsMsgList = getQS(listCB)
     if len(qsMsgList) > 0:
