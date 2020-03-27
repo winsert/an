@@ -4,7 +4,7 @@
 # 查询可转债、可交换债的最新价是否满足高从折扣和三线条件的模块
 __author__ = 'winsert@163.com'
 
-import urllib2
+import urllib2, time
 from readcb import readCB3 #读出 code=3(持仓) 可转债,可交换债的所有信息
 
 # 用于解析URL页面
@@ -69,9 +69,9 @@ def getCB(cblist):
             zdf, yjl = getZG(zgcode, zz, zgj)
             msg = name+u':'+str(zz)+u'>前高价'+str(HPrice)+u'\n正股:'+str(zdf)+'%'+u'，溢价率'+str(yjl)+'%'
             newHPrice = zz #新最高价
-        elif HPrice > 130.0 and zz < 130.0: #转债价格跌破130.00
-            msg = name+u':'+str(zz)+u' < 130元！'
-            newHPrice = 130.00 #将最高价重置为130.00
+        #elif HPrice > 130.0 and zz < 130.0: #转债价格跌破130.00
+            #msg = name+u':'+str(zz)+u' < 130元！'
+            #newHPrice = 130.00 #将最高价重置为130.00
         elif HPrice >= 130.0 and zz <= (HPrice-9) and zz > 130.0:
             msg = name+u':'+str(zz)+u'，自最高价下跌超过9元。'
             newHPrice = zz #新最高价
@@ -79,6 +79,9 @@ def getCB(cblist):
             msg = 'ok'
             print name + u' 最高价不变!\n'
     elif zz > 0 and zz < 130.00: #进行三线分析
+        if HPrice > 130.0: #转债价格跌破130.00
+            msg = name+u':'+str(zz)+u' < 130元！'
+            newHPrice = 130.00 #将最高价重置为130.00
         if zz <= jian and zz < (LPrice - 0.5) and zz > jia : #满足建仓条件
             msg = name+u':新低价'+str(zz)+u',建仓价:'+str(jian)
             newLPrice = zz #新最低价
@@ -98,7 +101,8 @@ def getCB(cblist):
     if msg != 'ok':
         print msg
         print
-
+    
+    print time.asctime(time.localtime(time.time())) #显示查询时间
     return msg, newHPrice, newLPrice, zz_zdf
 
 if __name__ == '__main__':
