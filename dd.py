@@ -140,13 +140,15 @@ def getCX(today):
     try:
         conn = sqlite3.connect('cb.db')
         curs = conn.cursor()
-        sql = "select name, Code, zgcode, Prefix, zgj, dqr, shj, ll, ce from cb0"
+        sql = "select name, zzcode, zgcode, Prefix, zgj, dqr, shj, ll, ce from cb where code > 0 and ce = 'c'"
         curs.execute(sql)
         tmp = curs.fetchall()
         curs.close()
         conn.close()
 
+        i = 0
         for cb in tmp:
+            i = i+1
             name = cb[0] #转债名称
             #print name
             code = cb[1] #转债代码
@@ -157,34 +159,31 @@ def getCX(today):
             shj = cb[6] #赎回价
             ll = cb[7] #每年的利率
             ce = cb[8] #区别转债和交换债
+                
+            zgcode = cb[3]+cb[2] #正股代码
+            zg_s, zg_e, zg_h, zg_l = getZG(zgcode) #查询正股开盘，收盘，最高，最低价数据
+            #print name, zg_s, zg_e, zg_h, zg_l
 
-            if prefix != 'QS' and ce != 'e':
-            #if cb[1] == '123005':
+            if zg_h != '0.000' and zg_l != '0.000': #判断正股是否停牌
 
-                zgcode = cb[3]+cb[2] #正股代码
-                zg_s, zg_e, zg_h, zg_l = getZG(zgcode) #查询正股开盘，收盘，最高，最低价数据
-                #print name, zg_s, zg_e, zg_h, zg_l
-
-                if zg_h != '0.000' and zg_l != '0.000': #判断正股是否停牌
-
-                    zzcode = cb[3]+cb[1] #转债代码
-                    zz_s, zz_e, zz_h, zz_l, zz_z, zz_j = getZZ(zzcode) #查询转债开盘，收盘，最高,最低价，成交张数，成交金额等数据
-                    #print name, zz_s, zz_e, zz_h, zz_l, zz_z, zz_j
+                zzcode = cb[3]+cb[1] #转债代码
+                zz_s, zz_e, zz_h, zz_l, zz_z, zz_j = getZZ(zzcode) #查询转债开盘，收盘，最高,最低价，成交张数，成交金额等数据
+                #print name, zz_s, zz_e, zz_h, zz_l, zz_z, zz_j
                     
-                    zgjz = (100/float(zgj))*float(zg_e) #计算转股价值
-                    yjl = str(round((float(zz_e) - zgjz)/zgjz*100, 2)) #计算溢价率
-                    #print name, zgjz, yjl
+                zgjz = (100/float(zgj))*float(zg_e) #计算转股价值
+                yjl = str(round((float(zz_e) - zgjz)/zgjz*100, 2)) #计算溢价率
+                #print name, zgjz, yjl
 
-                    synx = getSYNX(dqr) #计算剩余年限
-                    dqjz = getDQJZ(synx, shj, ll) #计算到期价值
-                    #print name, dqjz
+                synx = getSYNX(dqr) #计算剩余年限
+                dqjz = getDQJZ(synx, shj, ll) #计算到期价值
+                #print name, dqjz
 
-                    dqsyl = round((dqjz/float(zz_e) - 1) * 100, 3) #计算到期收益率
-                    dqnh = str(round(dqsyl/synx, 2)) #计算到期年化收益率
-                    print today, name, zz_s, zz_e, zz_h, zz_l, zz_z, zz_j, yjl, dqnh
+                dqsyl = round((dqjz/float(zz_e) - 1) * 100, 3) #计算到期收益率
+                dqnh = str(round(dqsyl/synx, 2)) #计算到期年化收益率
+                print today, name, zz_s, zz_e, zz_h, zz_l, zz_z, zz_j, yjl, dqnh
 
-                    getRECORD(today, code, zg_s, zg_e, zg_h, zg_l, zz_s, zz_e, zz_h, zz_l, zz_z, zz_j, yjl, dqnh)
-        
+                getRECORD(today, code, zg_s, zg_e, zg_h, zg_l, zz_s, zz_e, zz_h, zz_l, zz_z, zz_j, yjl, dqnh)
+        print u"\n共有 "+str(i)+u" 只可转债。\n"
     except Exception, e:
         print e
         
