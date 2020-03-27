@@ -100,10 +100,8 @@ if __name__ == '__main__':
             #查询持仓转债是否有满足三线买入条件，return msg和转债最新价
             msg, newHPrice, newLPrice, zdf = getCB(cblist)
             if msg != 'ok': # msg='ok',无提醒信息
-                print 'an.py is running.'
+                #print 'an.py is running.'
                 itchat.send(msg, toUserName = userName)
-            else:
-                print 'return msg is ok.'
             
             if newHPrice > cblist[10]: #如果转债最新价>原最高价，则修改新高价
                 list3[i][10] = newHPrice
@@ -117,7 +115,6 @@ if __name__ == '__main__':
             i = i +1
 
         time.sleep(100)  # 延时查询的秒数,120即延时2分钟查询一次。
-        print time.asctime(time.localtime(time.time())) #显示查询时间
 
     # 查询指数收盘的涨跌情况
     for k in index.keys():
