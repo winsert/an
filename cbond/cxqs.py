@@ -115,13 +115,13 @@ def getQS(listCB):
             if zz_hprice > hprice: #更新最高价
                 #print name, 'zz_hprice' , zz_hprice, hprice
                 modiHPrice(code, zz_hprice)
-                msg = name+u'最高价已更新为:'+str(zz_hprice)+u'元。'
+                msg = name+u' 最高价更新为:'+str(zz_hprice)+u'元。'
                 msglist.append(msg)
                 
             if zz_lprice < lprice: #更新最低价
                 #print name, 'zz_lprice', zz_lprice, lprice
                 modiLPrice(code, zz_lprice)
-                msg = name+u'最低价已更新为:'+str(zz_lprice)+u'元。'
+                msg = name+u' 最低价更新为:'+str(zz_lprice)+u'元。'
                 msglist.append(msg)
 
             y = zgqsr.split('-') #转换为日期格式
@@ -137,7 +137,7 @@ def getQS(listCB):
                         nqs = qs + 1
                         nqss = qss -1
                         qsDay(nqs, nqss, code)
-                        msg = name+u'\n已强赎'+str(nqs)+u'天,剩余天数:'+str(nqss)+u'天。'
+                        msg = name+u' 强赎'+str(nqs)+u'天,剩:'+str(nqss)+u'天。'
                         msglist.append(msg)
                     elif qsl > 1.3 and qs >= 15 and qss >= 0:
                         msg = name+u' 已完成强赎!!!'
@@ -145,7 +145,7 @@ def getQS(listCB):
                     elif qsl < 1.3 and qs >= 1 and qss >= 1:
                         nqss = qss -1
                         qssDay(nqss, code)
-                        msg = name+u'\n已强赎'+str(qs)+u'天,剩余天数:'+str(nqss)+u'天。'
+                        msg = name+u' 强赎'+str(qs)+u'天,剩:'+str(nqss)+u'天。'
                         msglist.append(msg)
 
         return msglist
@@ -159,7 +159,7 @@ def getQS(listCB):
 if __name__ == '__main__':
     
     # code!= 0 的转债列表(非强赎转债)
-    listCB = readCB()
+    listCB = readCB(-1)
 
     msglist = getQS(listCB)
     for msg in msglist:
