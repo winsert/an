@@ -4,8 +4,8 @@
 # 查询可转债、可交换债的最新价是否满足高从折扣和三线条件的模块
 __author__ = 'winsert@163.com'
 
-import urllib2, time
-from readcb import readCB3 #读出 code=3(持仓) 可转债,可交换债的所有信息
+import urllib2
+from readcb import readCB #读出 code=3(持仓) 可转债,可交换债的所有信息
 
 # 用于解析URL页面
 def bsObjForm(url):
@@ -22,12 +22,12 @@ def getZZ(zzcode):
         tmp_list = resp.split(',')
         zs_price = float(tmp_list[2]) #获取转债昨收价格
         zz_price = float(tmp_list[3]) #获取转债实时价格
-        zdf = round((zz_price/zs_price - 1) * 100, 2) #涨跌幅
-        return zz_price, zdf
+        zz_zdf = round((zz_price/zs_price - 1) * 100, 2) #涨跌幅
+        return zz_price, zz_zdf
     except:
         zz_price = 0
-        zdf = 0.0
-        return zz_price, zdf
+        zz_zdf = 0.0
+        return zz_price, zz_zdf
 
 # 用于计算正股涨跌幅和溢价率
 def getZG(zgcode, zz, zgj):
@@ -38,14 +38,14 @@ def getZG(zgcode, zz, zgj):
         tmp_list = resp.split(',')
         zs_price = float(tmp_list[2]) #获取正股昨收价格
         zg_price = float(tmp_list[3]) #获取正股实时价格
-        zdf = round((zg_price/zs_price - 1) * 100, 2) #涨跌幅
+        zg_zdf = round((zg_price/zs_price - 1) * 100, 2) #涨跌幅
         yjl = round((zz/(100/zgj*zg_price) - 1) * 100, 2) #溢价率
-        return zdf, yjl
+        return zg_zdf, yjl
     except:
-        zdf = 1.0
+        zg_zdf = 1.0
         yjl = 1.0
         print "getZG() is error !"
-        return zdf, yjl
+        return zg_zdf, yjl
 
 # 对可转债数据进行高价折扣和三线分析
 def getCB(cblist):
@@ -60,24 +60,21 @@ def getCB(cblist):
     zgj = float(cblist[17]) #转股价
         
     zz, zz_zdf = getZZ(zzcode) #查询转债价格和涨跌幅
-    newHPrice = HPrice #新最高价
-    newLPrice = LPrice #新最低价
+    newHPrice = HPrice #新最高价初始化
+    newLPrice = LPrice #新最低价初始化
 
     if zz >= 130.00: #进行高价折扣分析
         #if zz > HPrice + 1.0: #比原最高价高1.0元
         if zz > HPrice * 1.01: #比原最高价高1%    
-            zdf, yjl = getZG(zgcode, zz, zgj)
-            msg = name+u':'+str(zz)+u'>前高价'+str(HPrice)+u'\n正股:'+str(zdf)+'%'+u'，溢价率'+str(yjl)+'%'
+            zg_zdf, yjl = getZG(zgcode, zz, zgj)
+            msg = name+u':'+str(zz)+u'>前高价'+str(HPrice)+u'\n正股:'+str(zg_zdf)+'%'+u'，溢价率'+str(yjl)+'%'
             newHPrice = zz #新最高价
-        #elif HPrice > 130.0 and zz < 130.0: #转债价格跌破130.00
-            #msg = name+u':'+str(zz)+u' < 130元！'
-            #newHPrice = 130.00 #将最高价重置为130.00
-        elif HPrice >= 130.0 and zz <= (HPrice-9) and zz > 130.0:
+        elif HPrice >= 130.0 and zz <= (HPrice-9):
             msg = name+u':'+str(zz)+u'，自最高价下跌超过9元。'
             newHPrice = zz #新最高价
         else:
             msg = 'ok'
-            print name + u' 最高价不变!\n'
+            #print name+u" 最新价:"+str(zz)+u"元，原最高价:"+str(HPrice)+u"元不变!\n"
     elif zz > 0 and zz < 130.00: #进行三线分析
         if HPrice > 130.0: #转债价格跌破130.00
             msg = name+u':'+str(zz)+u' < 130元！'
@@ -93,7 +90,7 @@ def getCB(cblist):
             newLPrice = zz #新最低价
         else:
             msg = 'ok'
-            print name + u' 最低价不变!\n'
+            #print name+u" 最新价:"+str(zz)+u"元，原最低价:"+str(HPrice)+u"元不变!\n"
     else:
         msg = 'ok'
         print name + u" 停牌！\n"
@@ -102,12 +99,11 @@ def getCB(cblist):
         print msg
         print
     
-    print time.asctime(time.localtime(time.time())) #显示查询时间
     return msg, newHPrice, newLPrice, zz_zdf
 
 if __name__ == '__main__':
 
-    list3 = readCB3()
+    list3 = readCB(3)
     for cblist in list3:
         msg, newHPrice, newLPrice, zdf = getCB(cblist)
         print 'newHPrice = ', newHPrice
