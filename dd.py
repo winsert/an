@@ -7,7 +7,7 @@ __author__ = 'winsert@163.com'
 
 import sqlite3, urllib2
 from datetime import datetime
-from cx_ex import getEX
+#from cx_ex import getEX
 
 # 生成日期
 def getDATE():
@@ -55,6 +55,7 @@ def getZG(zgCode):
 # 用于查询转债的数据
 def getZZ(zzCode):
     key = zzCode
+    print key
     url = "http://hq.sinajs.cn/list="+key #生成用于查询的URL
     try:
         resp = bsObjForm(url)
@@ -111,7 +112,7 @@ def getRECORD(today, code, zg_s, zg_e, zg_h, zg_l, zz_s, zz_e, zz_h, zz_l, zz_z,
     zz_s = zz_s #转债开盘价
     zz_e = zz_e #转债收盘价
     zz_h = zz_h #转债最高价
-    zz_l = zz_l #转债zuid价
+    zz_l = zz_l #转债最低价
     zz_z = zz_z #转债成交张数
     zz_j = zz_j #转债成交金额
     yjl = yjl   #溢价率
@@ -139,7 +140,7 @@ def getCX(today):
     try:
         conn = sqlite3.connect('cb.db')
         curs = conn.cursor()
-        sql = "select name, Code, zgcode, Prefix, zgj, dqr, shj, ll, ce from cb"
+        sql = "select name, Code, zgcode, Prefix, zgj, dqr, shj, ll, ce from cb0"
         curs.execute(sql)
         tmp = curs.fetchall()
         curs.close()
