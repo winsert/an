@@ -20,9 +20,16 @@ def getZZ(zzcode):
     try:
         resp = bsObjForm(url)
         tmp_list = resp.split(',')
+        zz_name = tmp_list[0]
         zs_price = float(tmp_list[2]) #获取转债昨收价格
         zz_price = float(tmp_list[3]) #获取转债实时价格
-        zz_zdf = round((zz_price/zs_price - 1) * 100, 2) #涨跌幅
+        zz_hprice = float(tmp_list[4]) #获取转债当日最高价
+        zz_lprice = float(tmp_list[5]) #获取转债当日最低价
+        if abs(zz_hprice - zs_price) > abs(zz_lprice - zs_price):
+            zz_zdf = round((zz_hprice/zs_price - 1) * 100, 2) #最大涨幅
+        else:
+            zz_zdf = round((zz_lprice/zs_price - 1) * 100, 2) #最大跌幅
+        #print zz_name, zs_price, zz_hprice, zz_hprice-zs_price, zz_lprice, zz_lprice-zs_price, zz_zdf
         return zz_price, zz_zdf
     except:
         zz_price = 0
@@ -106,7 +113,7 @@ if __name__ == '__main__':
     list3 = readCB(3)
     for cblist in list3:
         msg, newHPrice, newLPrice, zdf = getCB(cblist)
-        print 'newHPrice = ', newHPrice
-        print 'newLPrice = ', newLPrice
-        print 'zz_zdf = ', zdf
-        print
+        #print 'newHPrice = ', newHPrice
+        #print 'newLPrice = ', newLPrice
+        #print 'zz_zdf = ', zdf
+        #print
