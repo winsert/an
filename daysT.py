@@ -189,6 +189,23 @@ def SQL(record): #向数据库insert新记录
     except Exception,e:
         print "SQL_Error is:", e
 
+#显示牛熊占比
+def getNX(today):
+    try:
+        conn = sqlite3.connect('dd.db')
+        curs = conn.cursor()
+        sql = "select date, csum, vsum from cbt where date = '%s'" %today 
+        curs.execute(sql)
+        tmp = curs.fetchall()
+        curs.close()
+        conn.close()
+        
+        rate = round((float(tmp[0][2])/float(tmp[0][1])), 4) * 100
+        print today + u' 共有'+tmp[0][1]+u'只转债，其中'+tmp[0][2]+u'只转债的收盘价>到期价值，占比：'+str(rate)+'%\n'
+
+    except Exception, e:
+        print 'getNX()', e
+
 if __name__ == '__main__':
     
     days = 1 #查询倒数days天的数据
@@ -216,12 +233,13 @@ if __name__ == '__main__':
         cjje_list.append(rates[1]) #收盘价>到期价值的转债数量
         print cjje_list
 
-        print u"是否增加 " + cjje[0] + u" 的数据？",
+        print u"\n是否增加 " + cjje[0] + u" 的数据？",
         yn = raw_input("(y/n) ?")
 
         if yn == 'y':
             print u"\n正在增加 " + cjje[0] + u" 的数据......"
-            SQL(cjje_list)    
+            SQL(cjje_list)
+            getNX(cjje[0]) #显示牛熊占比
             print u"\n操作已完成。"
         elif yn == 'n':
             print u"\n没有增加新数据。"

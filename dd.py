@@ -189,7 +189,7 @@ def getCX(today):
         
 if __name__ == '__main__':
     today = getDATE() #生成日期
-    print u"是否增加 " + today + u" 的数据？",
+    print u"\n是否增加 " + today + u" 的数据？",
     yn = raw_input("(y/n) ?")
     if yn == 'y':
         print u"\n正在增加 " + today + u" 的数据......"
