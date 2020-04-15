@@ -2,12 +2,10 @@
 # -*- coding: UTF-8 -*-
 
 # 本程序用于记录可转债每日的开盘价，收盘价，溢价率，年化收益率等数据
-
 __author__ = 'winsert@163.com'
 
 import sqlite3, urllib2
 from datetime import datetime
-#from cx_ex import getEX
 
 # 生成日期
 def getDATE():
@@ -55,7 +53,6 @@ def getZG(zgCode):
 # 用于查询转债的数据
 def getZZ(zzCode):
     key = zzCode
-    print key
     url = "http://hq.sinajs.cn/list="+key #生成用于查询的URL
     try:
         resp = bsObjForm(url)
@@ -133,7 +130,7 @@ def getRECORD(today, code, zg_s, zg_e, zg_h, zg_l, zz_s, zz_e, zz_h, zz_l, zz_z,
     curs.close()
     conn.close()
 
-# 主程序
+# 记录转债、正股的日交易数据
 def getCX(today):
     today = today
     
@@ -183,10 +180,68 @@ def getCX(today):
                 print today, name, zz_s, zz_e, zz_h, zz_l, zz_z, zz_j, yjl, dqnh
 
                 getRECORD(today, code, zg_s, zg_e, zg_h, zg_l, zz_s, zz_e, zz_h, zz_l, zz_z, zz_j, yjl, dqnh)
-        print u"\n共有 "+str(i)+u" 只可转债。\n"
+        print
+        print today + u" 共有 "+str(i)+u" 只可转债生成交易数据。\n"
     except Exception, e:
         print e
+
+#写入cbt表
+def NXSQL(record): #向数据库insert新记录
+    rec = record
+    try:
+        conn = sqlite3.connect('dd.db')
+        curs = conn.cursor()
+        sql = "insert into cbt (date, cjje, csum, vsum) VALUES (?, ?, ?, ?)"
+        curs.execute(sql, rec)
+        conn.commit()
+        curs.close()
+        conn.close()
+        print u"已记入dd.db数据库的cbt表。"
+        print
+    except Exception,e:
+        print "NXSQL_Error is:", e
+
+#显示牛熊占比
+def getNX():
+    record = []
+    record.append(today)
+    try:
+        conn = sqlite3.connect('cb.db')
+        curs = conn.cursor()
+        sql = "select * from cb where code>0 and ce!='e'"
+        curs.execute(sql)
+        tmp = curs.fetchall()
+        curs.close()
+        conn.close()
         
+        cbs = []
+        cjje = 0.0
+        for cb in tmp:
+            name = cb[3] #转债名称
+            zzcode = cb[5] #转债代码
+            prefix = cb[7] #前缀
+            zzCode = prefix+zzcode
+            zz_s, zz_e, zz_h, zz_l, zz_z, zz_j = getZZ(zzCode)
+            cjje = cjje + float(zz_j)
+            dqr = cb[19] #到期日
+            shj = cb[20] #赎回价
+            ll = cb[24] #每年的利率
+            synx = getSYNX(dqr) #计算剩余年限
+            dqjz = getDQJZ(synx, shj, ll) #计算到期价值
+            if float(zz_e) > dqjz:
+                cbs.append(cb)
+                #print name, zz_e, dqjz
+        cjje = round(cjje / 100000000, 2)
+        record.append(cjje)
+        record.append(len(tmp))
+        record.append(len(cbs))
+        rate = round(float(len(cbs))/float(len(tmp)), 4) * 100
+        #print len(tmp), len(cbs), rate, round(cjje / 100000000, 2)
+        print today + u' 共有'+str(len(tmp))+u'只转债，其中'+str(len(cbs))+u'只转债的收盘价>到期价值，占比：'+str(rate)+'%。'
+        NXSQL(record)
+    except Exception, e:
+        print 'getNX()_error is : ', e
+
 if __name__ == '__main__':
     today = getDATE() #生成日期
     print u"\n是否增加 " + today + u" 的数据？",
@@ -194,6 +249,7 @@ if __name__ == '__main__':
     if yn == 'y':
         print u"\n正在增加 " + today + u" 的数据......"
         getCX(today)
+        getNX() #显示牛熊占比
         print u"\n操作已完成。"
     elif yn == 'n':
         print u"\n今天是：" + today
@@ -207,6 +263,7 @@ if __name__ == '__main__':
             print u"\n正在增加 " +str(date) + u" 的数据......"
             ds = str(date) 
             getCX(ds)
+            getNX() #显示牛熊占比
             print u"\n操作已完成。"
         else:
             print u"\n没有增加新数据！"    
